@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="480" viewBox="0 0 500 480">
+  <!-- 배경 -->
+  <rect x="0" y="0" width="500" height="480" fill="#ffffff"/>
+  
+  <!-- 제목 -->
+  <text x="250" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#6366f1">★ 공통관련</text>
+  
+  <!-- 시작 -->
+  <ellipse cx="250" cy="50" rx="50" ry="22" fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+  <text x="250" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff">시작</text>
+  
+  <!-- 화살표 1 -->
+  <line x1="250" y1="72" x2="250" y2="95" stroke="#64748b" stroke-width="2"/>
+  <polygon points="250,102 245,92 255,92" fill="#64748b"/>
+  
+  <!-- 앱 접근권한 안내 -->
+  <rect x="150" y="105" width="200" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="250" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12">앱 접근권한 안내</text>
+  
+  <!-- 화살표 2 -->
+  <line x1="250" y1="145" x2="250" y2="168" stroke="#64748b" stroke-width="2"/>
+  <polygon points="250,175 245,165 255,165" fill="#64748b"/>
+  
+  <!-- 앱 접근권한 동의 -->
+  <rect x="150" y="178" width="200" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="250" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="12">앱 접근권한 동의</text>
+  
+  <!-- 화살표 3 -->
+  <line x1="250" y1="218" x2="250" y2="241" stroke="#64748b" stroke-width="2"/>
+  <polygon points="250,248 245,238 255,238" fill="#64748b"/>
+  
+  <!-- 로그인 페이지 -->
+  <rect x="130" y="251" width="240" height="45" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="250" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11">로그인 페이지</text>
+  <text x="250" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">(회원가입 / ID·PASS / 소셜 로그인)</text>
+  
+  <!-- 화살표 4 -->
+  <line x1="250" y1="296" x2="250" y2="319" stroke="#64748b" stroke-width="2"/>
+  <polygon points="250,326 245,316 255,316" fill="#64748b"/>
+  
+  <!-- 마름모: 회원가입 or 로그인 -->
+  <polygon points="250,330 320,370 250,410 180,370" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="250" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="500">회원가입</text>
+  <text x="250" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="500">or 로그인?</text>
+  
+  <!-- 왼쪽 분기: 회원가입 -->
+  <line x1="180" y1="370" x2="80" y2="370" stroke="#64748b" stroke-width="2"/>
+  <line x1="80" y1="370" x2="80" y2="430" stroke="#64748b" stroke-width="2"/>
+  <polygon points="80,437 75,427 85,427" fill="#64748b"/>
+  <text x="130" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#16a34a" font-weight="bold">회원가입</text>
+  
+  <!-- 오른쪽 분기: 로그인 -->
+  <line x1="320" y1="370" x2="420" y2="370" stroke="#64748b" stroke-width="2"/>
+  <line x1="420" y1="370" x2="420" y2="430" stroke="#64748b" stroke-width="2"/>
+  <polygon points="420,437 415,427 425,427" fill="#64748b"/>
+  <text x="370" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#dc2626" font-weight="bold">로그인</text>
+  
+  <!-- 신규 가입자 플로우 -->
+  <rect x="20" y="440" width="120" height="35" rx="15" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="80" y="462" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#166534">→ 신규 가입자 플로우</text>
+  
+  <!-- 기존 가입자 플로우 -->
+  <rect x="360" y="440" width="120" height="35" rx="15" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+  <text x="420" y="462" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#991b1b">→ 기존 가입자 플로우</text>
+</svg>
+
+
+
+
+
+
+

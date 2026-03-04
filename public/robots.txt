@@ -1,0 +1,17 @@
+# K-Handicap.com Robots.txt
+# 검색엔진 크롤러 설정
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# 사이트맵 위치
+Sitemap: https://k-handicap.com/sitemap.xml
+
+
+
+
+
+
+

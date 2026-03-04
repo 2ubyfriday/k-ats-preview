@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>회원가입 프로세스 순서도 (14세 포함)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+    .container { max-width: 1400px; margin: 0 auto; }
+    h1 { text-align: center; color: #1e3a5f; margin-bottom: 30px; }
+    
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow-x: auto;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid;
+    }
+    .section-title.common { color: #6366f1; border-color: #6366f1; }
+    .section-title.new { color: #10b981; border-color: #10b981; }
+    .section-title.existing { color: #f59e0b; border-color: #f59e0b; }
+    .section-title.minor { color: #ec4899; border-color: #ec4899; }
+    
+    .note-box {
+      background: #fffbeb;
+      border: 2px dashed #f59e0b;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .note-box strong { color: #b45309; }
+    
+    .note-box.pink {
+      background: #fdf2f8;
+      border-color: #ec4899;
+    }
+    .note-box.pink strong { color: #be185d; }
+    
+    .flowchart-container {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 10px;
+    }
+    
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+      padding: 15px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+    .comparison-table th,
+    .comparison-table td {
+      border: 1px solid #e2e8f0;
+      padding: 12px 16px;
+      text-align: center;
+    }
+    .comparison-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+    }
+    .comparison-table td { background: white; }
+    .comparison-table .highlight { background: #fef3c7; font-weight: 500; }
+    .comparison-table .minor-col { background: #fdf2f8; }
+    .comparison-table .adult-col { background: #dbeafe; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📋 회원가입 프로세스 순서도 (14세 포함)</h1>
+    
+    <!-- 범례 -->
+    <div class="legend">
+      <div class="legend-item">
+        <svg width="50" height="25"><ellipse cx="25" cy="12" rx="24" ry="11" fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/></svg>
+        <span>시작/종료</span>
+      </div>
+      <div class="legend-item">
+        <svg width="50" height="30"><rect x="1" y="1" width="48" height="28" rx="4" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/></svg>
+        <span>처리</span>
+      </div>
+      <div class="legend-item">
+        <svg width="40" height="30"><polygon points="20,2 38,15 20,28 2,15" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/></svg>
+        <span>조건/분기</span>
+      </div>
+      <div class="legend-item">
+        <svg width="50" height="30"><rect x="1" y="1" width="48" height="28" rx="4" fill="#fdf2f8" stroke="#ec4899" stroke-width="2"/></svg>
+        <span>14세 미만 전용</span>
+      </div>
+    </div>
+    
+    <!-- 14세 관련 요약 -->
+    <div class="section">
+      <div class="section-title minor">📌 14세 미만 처리 요약</div>
+      <div class="note-box pink">
+        <strong>⚠️ 14세 미만 사용자 가입 시 차이점:</strong><br>
+        1. <strong>약관 내용</strong>이 다름 (법정대리인 동의 관련 문구 포함)<br>
+        2. <strong>법정대리인(부모/보호자) 동의</strong> 필요 여부 확인<br>
+        3. 본인인증 시 <strong>만 나이 확인</strong> 후 분기 처리
+      </div>
+      
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th class="adult-col">14세 이상 (일반)</th>
+            <th class="minor-col">14세 미만</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>약관 내용</strong></td>
+            <td class="adult-col">일반 약관</td>
+            <td class="minor-col highlight">아동용 약관 (법정대리인 동의 문구 포함)</td>
+          </tr>
+          <tr>
+            <td><strong>법정대리인 동의</strong></td>
+            <td class="adult-col">불필요</td>
+            <td class="minor-col highlight">필요 (부모/보호자)</td>
+          </tr>
+          <tr>
+            <td><strong>본인인증</strong></td>
+            <td class="adult-col">본인 PASS 인증</td>
+            <td class="minor-col highlight">본인 + 법정대리인 인증</td>
+          </tr>
+          <tr>
+            <td><strong>개인정보 수집</strong></td>
+            <td class="adult-col">본인 동의</td>
+            <td class="minor-col highlight">법정대리인 동의 필수</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 공통관련 -->
+    <div class="section">
+      <div class="section-title common">★ 공통관련</div>
+      <div class="note-box">
+        <strong>※ 14세 미만의 경우:</strong> 약관 내용이 다르며, 법정대리인 동의가 필요합니다.
+      </div>
+      
+      <div class="flowchart-container">
+        <svg width="500" height="480" viewBox="0 0 500 480">
+          <!-- 시작 -->
+          <ellipse cx="250" cy="30" rx="50" ry="22" fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+          <text x="250" y="35" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">시작</text>
+          
+          <!-- 화살표 1 -->
+          <line x1="250" y1="52" x2="250" y2="75" stroke="#64748b" stroke-width="2"/>
+          <polygon points="250,82 245,72 255,72" fill="#64748b"/>
+          
+          <!-- 앱 접근권한 안내 -->
+          <rect x="150" y="85" width="200" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="250" y="110" text-anchor="middle" font-size="12">앱 접근권한 안내</text>
+          
+          <!-- 화살표 2 -->
+          <line x1="250" y1="125" x2="250" y2="148" stroke="#64748b" stroke-width="2"/>
+          <polygon points="250,155 245,145 255,145" fill="#64748b"/>
+          
+          <!-- 앱 접근권한 동의 -->
+          <rect x="150" y="158" width="200" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="250" y="183" text-anchor="middle" font-size="12">앱 접근권한 동의</text>
+          
+          <!-- 화살표 3 -->
+          <line x1="250" y1="198" x2="250" y2="221" stroke="#64748b" stroke-width="2"/>
+          <polygon points="250,228 245,218 255,218" fill="#64748b"/>
+          
+          <!-- 로그인 페이지 -->
+          <rect x="130" y="231" width="240" height="45" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="250" y="250" text-anchor="middle" font-size="11">로그인 페이지</text>
+          <text x="250" y="265" text-anchor="middle" font-size="9" fill="#64748b">(회원가입 / ID·PASS / 소셜 로그인)</text>
+          
+          <!-- 화살표 4 -->
+          <line x1="250" y1="276" x2="250" y2="299" stroke="#64748b" stroke-width="2"/>
+          <polygon points="250,306 245,296 255,296" fill="#64748b"/>
+          
+          <!-- 마름모: 회원가입 or 로그인 -->
+          <polygon points="250,310 320,350 250,390 180,350" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="250" y="345" text-anchor="middle" font-size="11" font-weight="500">회원가입</text>
+          <text x="250" y="360" text-anchor="middle" font-size="11" font-weight="500">or 로그인?</text>
+          
+          <!-- 왼쪽 분기: 회원가입 -->
+          <line x1="180" y1="350" x2="80" y2="350" stroke="#64748b" stroke-width="2"/>
+          <line x1="80" y1="350" x2="80" y2="420" stroke="#64748b" stroke-width="2"/>
+          <polygon points="80,427 75,417 85,417" fill="#64748b"/>
+          <text x="130" y="340" text-anchor="middle" font-size="10" fill="#16a34a" font-weight="bold">회원가입</text>
+          
+          <!-- 오른쪽 분기: 로그인 -->
+          <line x1="320" y1="350" x2="420" y2="350" stroke="#64748b" stroke-width="2"/>
+          <line x1="420" y1="350" x2="420" y2="420" stroke="#64748b" stroke-width="2"/>
+          <polygon points="420,427 415,417 425,417" fill="#64748b"/>
+          <text x="370" y="340" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">로그인</text>
+          
+          <!-- 신규 가입자 플로우 -->
+          <rect x="20" y="430" width="120" height="35" rx="15" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+          <text x="80" y="452" text-anchor="middle" font-size="10" fill="#166534">→ 신규 가입자 플로우</text>
+          
+          <!-- 기존 가입자 플로우 -->
+          <rect x="360" y="430" width="120" height="35" rx="15" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+          <text x="420" y="452" text-anchor="middle" font-size="10" fill="#991b1b">→ 기존 가입자 플로우</text>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- 신규 가입자 (14세 포함) - 높이 증가 -->
+    <div class="section">
+      <div class="section-title new">★ 신규 가입자 (14세 분기 포함)</div>
+      <div class="note-box">
+        <strong>★ 참고:</strong> 소셜 가입 시 사업대상자를 사용자가 입력하지 않아 알 수 없어 계정통합으로 가지 않음<br>
+        <strong>★ 14세:</strong> 본인인증 후 만 나이 확인 → 14세 미만이면 법정대리인 동의 절차 추가
+      </div>
+      
+      <div class="flowchart-container">
+        <svg width="1000" height="1300" viewBox="0 0 1000 1300">
+          <!-- 1. 회원가입 선택 (시작) -->
+          <ellipse cx="500" cy="35" rx="80" ry="25" fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+          <text x="500" y="40" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">1. 회원가입 선택</text>
+          
+          <!-- 화살표 -->
+          <line x1="500" y1="60" x2="500" y2="90" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,97 495,87 505,87" fill="#64748b"/>
+          
+          <!-- 2. 마름모: 가입 방식? -->
+          <polygon points="500,100 590,150 500,200 410,150" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="500" y="155" text-anchor="middle" font-size="12" font-weight="500">가입 방식?</text>
+          
+          <!-- 왼쪽: 일반 가입 -->
+          <line x1="410" y1="150" x2="200" y2="150" stroke="#64748b" stroke-width="2"/>
+          <line x1="200" y1="150" x2="200" y2="350" stroke="#64748b" stroke-width="2"/>
+          <line x1="200" y1="350" x2="380" y2="350" stroke="#64748b" stroke-width="2"/>
+          <polygon points="387,350 377,345 377,355" fill="#64748b"/>
+          <text x="305" y="140" text-anchor="middle" font-size="11" fill="#16a34a" font-weight="bold">일반</text>
+          
+          <!-- 오른쪽: 소셜 가입 -->
+          <line x1="590" y1="150" x2="800" y2="150" stroke="#64748b" stroke-width="2"/>
+          <line x1="800" y1="150" x2="800" y2="210" stroke="#64748b" stroke-width="2"/>
+          <polygon points="800,217 795,207 805,207" fill="#64748b"/>
+          <text x="695" y="140" text-anchor="middle" font-size="11" fill="#dc2626" font-weight="bold">소셜</text>
+          
+          <!-- 소셜: 개인정보 처리동의 -->
+          <rect x="660" y="220" width="280" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="800" y="242" text-anchor="middle" font-size="11">소셜(카카오,네이버)</text>
+          <text x="800" y="258" text-anchor="middle" font-size="10">개인정보 처리동의 Alert</text>
+          
+          <!-- 소셜 → 약관동의로 연결 -->
+          <line x1="800" y1="270" x2="800" y2="350" stroke="#64748b" stroke-width="2"/>
+          <line x1="800" y1="350" x2="620" y2="350" stroke="#64748b" stroke-width="2"/>
+          <polygon points="613,350 623,345 623,355" fill="#64748b"/>
+          
+          <!-- 3. 약관동의 (통합) -->
+          <rect x="390" y="325" width="220" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="500" y="355" text-anchor="middle" font-size="12">3. 약관동의</text>
+          
+          <!-- 14세 미만 약관 안내 박스 -->
+          <rect x="650" y="315" width="180" height="70" rx="8" fill="#fdf2f8" stroke="#ec4899" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="740" y="340" text-anchor="middle" font-size="10" fill="#be185d" font-weight="bold">※ 14세 미만인 경우</text>
+          <text x="740" y="360" text-anchor="middle" font-size="10" fill="#9d174d">아동용 약관 표시</text>
+          <text x="740" y="377" text-anchor="middle" font-size="9" fill="#9d174d">(법정대리인 동의 문구 포함)</text>
+          
+          <!-- 화살표 -->
+          <line x1="500" y1="375" x2="500" y2="415" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,422 495,412 505,412" fill="#64748b"/>
+          
+          <!-- 4. 본인인증 -->
+          <rect x="390" y="425" width="220" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="500" y="455" text-anchor="middle" font-size="12">4. 본인인증 페이지</text>
+          
+          <!-- 화살표 -->
+          <line x1="500" y1="475" x2="500" y2="515" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,522 495,512 505,512" fill="#64748b"/>
+          
+          <!-- ★★★ 14세 확인 마름모 ★★★ -->
+          <polygon points="500,525 600,585 500,645 400,585" fill="#fdf2f8" stroke="#ec4899" stroke-width="2"/>
+          <text x="500" y="580" text-anchor="middle" font-size="12" font-weight="600" fill="#be185d">만 14세</text>
+          <text x="500" y="598" text-anchor="middle" font-size="12" font-weight="600" fill="#be185d">미만?</text>
+          
+          <!-- 14세 미만: YES → 법정대리인 동의 (왼쪽으로) -->
+          <line x1="400" y1="585" x2="250" y2="585" stroke="#ec4899" stroke-width="2"/>
+          <line x1="250" y1="585" x2="250" y2="660" stroke="#ec4899" stroke-width="2"/>
+          <polygon points="250,667 245,657 255,657" fill="#ec4899"/>
+          <text x="325" y="570" text-anchor="middle" font-size="11" fill="#ec4899" font-weight="bold">YES (미만)</text>
+          <text x="270" y="630" text-anchor="start" font-size="8" fill="#ec4899">↓ 입력</text>
+          
+          <!-- 4-1. 법정대리인 동의 (14세 미만 전용) -->
+          <rect x="100" y="670" width="300" height="90" rx="8" fill="#fdf2f8" stroke="#ec4899" stroke-width="2"/>
+          <text x="250" y="698" text-anchor="middle" font-size="13" font-weight="600" fill="#be185d">4-1. 법정대리인 동의</text>
+          <text x="250" y="720" text-anchor="middle" font-size="10" fill="#9d174d">부모/보호자 본인인증</text>
+          <text x="250" y="738" text-anchor="middle" font-size="10" fill="#9d174d">+ 개인정보 수집 동의</text>
+          <text x="250" y="755" text-anchor="middle" font-size="8" fill="#9d174d" font-style="italic">↓ 완료 후 CI 확인으로</text>
+          
+          <!-- 법정대리인 동의 → 기존 CI 확인으로 합류 (한 번만 꺾어서) -->
+          <line x1="250" y1="760" x2="250" y2="850" stroke="#ec4899" stroke-width="3"/>
+          <line x1="250" y1="850" x2="393" y2="850" stroke="#ec4899" stroke-width="3"/>
+          <polygon points="400,850 390,845 390,855" fill="#ec4899"/>
+          <text x="270" y="830" text-anchor="start" font-size="10" fill="#ec4899" font-weight="bold">법정대리인 동의 완료 → CI 확인</text>
+          
+          <!-- 14세 이상: NO → 기존 CI 확인 (오른쪽으로 들어감) -->
+          <line x1="600" y1="585" x2="850" y2="585" stroke="#22c55e" stroke-width="3"/>
+          <line x1="850" y1="585" x2="850" y2="860" stroke="#22c55e" stroke-width="3"/>
+          <line x1="850" y1="860" x2="607" y2="860" stroke="#22c55e" stroke-width="3"/>
+          <polygon points="600,860 610,855 610,865" fill="#22c55e"/>
+          <text x="725" y="570" text-anchor="middle" font-size="11" fill="#16a34a" font-weight="bold">NO (이상)</text>
+          <text x="870" y="680" text-anchor="start" font-size="9" fill="#22c55e" font-weight="bold">14세 이상</text>
+          <text x="870" y="695" text-anchor="start" font-size="9" fill="#22c55e" font-weight="bold">법정대리인</text>
+          <text x="870" y="710" text-anchor="start" font-size="9" fill="#22c55e" font-weight="bold">동의 불필요</text>
+          
+          <!-- 마름모: 기존 CI 있음? -->
+          <polygon points="500,800 600,860 500,920 400,860" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="500" y="865" text-anchor="middle" font-size="11" font-weight="500">기존 CI 있음?</text>
+          
+          <!-- CI 있음: 기가입 안내 (왼쪽으로 나감) -->
+          <line x1="400" y1="860" x2="140" y2="860" stroke="#ef4444" stroke-width="3" stroke-dasharray="8,4"/>
+          <line x1="140" y1="860" x2="140" y2="1110" stroke="#ef4444" stroke-width="3" stroke-dasharray="8,4"/>
+          <polygon points="140,1117 135,1107 145,1107" fill="#ef4444"/>
+          <text x="280" y="880" text-anchor="middle" font-size="10" fill="#ef4444" font-weight="bold">있음</text>
+          <text x="160" y="950" text-anchor="start" font-size="9" fill="#ef4444" font-weight="bold">기존 가입자</text>
+          <text x="160" y="965" text-anchor="start" font-size="9" fill="#ef4444" font-weight="bold">가입 중단</text>
+          
+          <rect x="40" y="1120" width="200" height="55" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+          <text x="140" y="1145" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">기 가입 안내</text>
+          <text x="140" y="1163" text-anchor="middle" font-size="10" fill="#991b1b">(ID가 있음을 안내)</text>
+          
+          <!-- CI 없음: 소셜 가입? (아래쪽으로 나감) -->
+          <line x1="500" y1="920" x2="500" y2="945" stroke="#3b82f6" stroke-width="3"/>
+          <line x1="500" y1="945" x2="620" y2="945" stroke="#3b82f6" stroke-width="3"/>
+          <line x1="620" y1="945" x2="620" y2="988" stroke="#3b82f6" stroke-width="3"/>
+          <polygon points="620,995 615,985 625,985" fill="#3b82f6"/>
+          <text x="505" y="930" text-anchor="start" font-size="10" fill="#3b82f6" font-weight="bold">없음</text>
+          <text x="505" y="945" text-anchor="start" font-size="9" fill="#3b82f6" font-weight="bold">신규 사용자 가입 진행</text>
+          
+          <!-- 마름모: 소셜 가입? -->
+          <polygon points="700,945 780,995 700,1045 620,995" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="700" y="1000" text-anchor="middle" font-size="11" font-weight="500">소셜 가입?</text>
+          
+          <!-- 소셜 Yes: 생체정보 (왼쪽 경로) -->
+          <line x1="620" y1="995" x2="550" y2="995" stroke="#22c55e" stroke-width="3"/>
+          <line x1="550" y1="995" x2="550" y2="1080" stroke="#22c55e" stroke-width="3"/>
+          <polygon points="550,1087 545,1077 555,1077" fill="#22c55e"/>
+          <text x="560" y="983" text-anchor="middle" font-size="10" fill="#16a34a" font-weight="bold">Yes</text>
+          <text x="570" y="1040" text-anchor="start" font-size="9" fill="#22c55e" font-weight="bold">소셜 가입</text>
+          <text x="570" y="1055" text-anchor="start" font-size="9" fill="#22c55e" font-weight="bold">→ 생체정보</text>
+          
+          <!-- 소셜 No: 회원가입 (오른쪽 경로) -->
+          <line x1="780" y1="995" x2="900" y2="995" stroke="#3b82f6" stroke-width="3"/>
+          <line x1="900" y1="995" x2="900" y2="1080" stroke="#3b82f6" stroke-width="3"/>
+          <polygon points="900,1087 895,1077 905,1077" fill="#3b82f6"/>
+          <text x="840" y="983" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">No</text>
+          <text x="920" y="1040" text-anchor="start" font-size="9" fill="#3b82f6" font-weight="bold">일반 가입</text>
+          <text x="920" y="1055" text-anchor="start" font-size="9" fill="#3b82f6" font-weight="bold">→ ID/PASS</text>
+          
+          <!-- 5. 회원가입 페이지 -->
+          <rect x="800" y="1090" width="200" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="900" y="1112" text-anchor="middle" font-size="11">5. 회원가입 페이지</text>
+          <text x="900" y="1130" text-anchor="middle" font-size="10" fill="#64748b">(ID/PASS 설정)</text>
+          
+          <!-- 6. 생체정보 -->
+          <rect x="430" y="1090" width="240" height="50" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+          <text x="550" y="1112" text-anchor="middle" font-size="11">6. 생체정보 페이지</text>
+          <text x="550" y="1130" text-anchor="middle" font-size="10" fill="#64748b">(키, 몸무게, 보건소)</text>
+          
+          <!-- 회원가입 → 생체정보 합류 -->
+          <line x1="900" y1="1140" x2="900" y2="1165" stroke="#64748b" stroke-width="2"/>
+          <line x1="900" y1="1165" x2="550" y2="1165" stroke="#64748b" stroke-width="2"/>
+          <line x1="550" y1="1140" x2="550" y2="1165" stroke="#64748b" stroke-width="2"/>
+          <line x1="550" y1="1165" x2="550" y2="1190" stroke="#64748b" stroke-width="2"/>
+          <polygon points="550,1197 545,1187 555,1187" fill="#64748b"/>
+          
+          <!-- 7. 가입완료 -->
+          <ellipse cx="550" cy="1230" rx="70" ry="28" fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+          <text x="550" y="1235" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">7. 가입완료 ✓</text>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- 기존 가입자 (14세 포함) - 14세 분기를 흐름 안에 포함 -->
+    <div class="section">
+      <div class="section-title existing">★ 기존 가입자 (14세 분기 포함)</div>
+      <div class="note-box">
+        <strong>※ 주요 조건:</strong><br>
+        • 보편, 사업 대상자 ID 중복 안됨<br>
+        • 사업대상자는 현재 CI값이 없음<br>
+        • 소셜 가입자도 CI 없으면 사업 대상자 로직 사용<br>
+        • 사용자는 보편인지 사업인지 모른다는 가정<br>
+        • <strong style="color:#be185d">14세 미만 로그인 시</strong>: 최초 로그인이면 법정대리인 동의 절차 필요
+      </div>
+      
+      <div class="flowchart-container">
+        <svg width="1050" height="1480" viewBox="0 0 1050 1480">
+          <!-- 0. 로그인 정보입력 -->
+          <ellipse cx="500" cy="35" rx="100" ry="28" fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+          <text x="500" y="30" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">0. 로그인 정보입력</text>
+          <text x="500" y="47" text-anchor="middle" font-size="10" fill="#fff">(ID / 카카오 / 네이버)</text>
+          
+          <!-- 화살표 -->
+          <line x1="500" y1="63" x2="500" y2="95" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,102 495,92 505,92" fill="#64748b"/>
+          
+          <!-- 마름모: 보편대상자 DB 일치? -->
+          <polygon points="500,105 600,165 500,225 400,165" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="500" y="158" text-anchor="middle" font-size="11" font-weight="500">보편대상자</text>
+          <text x="500" y="175" text-anchor="middle" font-size="11" font-weight="500">DB 일치?</text>
+          
+          <!-- 보편 있음 -->
+          <line x1="400" y1="165" x2="220" y2="165" stroke="#64748b" stroke-width="2"/>
+          <line x1="220" y1="165" x2="220" y2="230" stroke="#64748b" stroke-width="2"/>
+          <polygon points="220,237 215,227 225,227" fill="#64748b"/>
+          <text x="310" y="155" text-anchor="middle" font-size="10" fill="#16a34a" font-weight="bold">있음</text>
+          
+          <!-- 보편 없음 -->
+          <line x1="600" y1="165" x2="780" y2="165" stroke="#64748b" stroke-width="2"/>
+          <line x1="780" y1="165" x2="780" y2="230" stroke="#64748b" stroke-width="2"/>
+          <polygon points="780,237 775,227 785,227" fill="#64748b"/>
+          <text x="690" y="155" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">없음</text>
+          
+          <!-- 마름모: 로그인 형식? (보편 있음) -->
+          <polygon points="220,240 310,295 220,350 130,295" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="220" y="300" text-anchor="middle" font-size="10" font-weight="500">로그인 형식?</text>
+          
+          <!-- ============ 보편+ID/PASS 경로 ============ -->
+          <line x1="130" y1="295" x2="60" y2="295" stroke="#64748b" stroke-width="2"/>
+          <line x1="60" y1="295" x2="60" y2="380" stroke="#64748b" stroke-width="2"/>
+          <polygon points="60,387 55,377 65,377" fill="#64748b"/>
+          <text x="95" y="283" text-anchor="middle" font-size="9" fill="#16a34a" font-weight="bold">ID/PASS</text>
+          
+          <!-- 5-1. 계정통합 (보편+ID) -->
+          <rect x="10" y="390" width="100" height="60" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+          <text x="60" y="415" text-anchor="middle" font-size="9" font-weight="500">5-1. 계정통합</text>
+          <text x="60" y="435" text-anchor="middle" font-size="8" fill="#64748b">(SKIP 가능)</text>
+          
+          <!-- 보편+ID → 바로 7. 생체정보로 (점선) -->
+          <line x1="60" y1="450" x2="60" y2="1342" stroke="#64748b" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="60" y1="1342" x2="363" y2="1342" stroke="#64748b" stroke-width="2" stroke-dasharray="6,4"/>
+          <polygon points="370,1342 360,1337 360,1347" fill="#64748b"/>
+          <text x="60" y="490" text-anchor="middle" font-size="8" fill="#22c55e">→ 7. 생체정보로</text>
+          <text x="60" y="505" text-anchor="middle" font-size="8" fill="#22c55e">바로 이동</text>
+          
+          <!-- ============ 보편+소셜 경로 ============ -->
+          <line x1="310" y1="295" x2="380" y2="295" stroke="#64748b" stroke-width="2"/>
+          <line x1="380" y1="295" x2="380" y2="400" stroke="#64748b" stroke-width="2"/>
+          <line x1="380" y1="400" x2="393" y2="400" stroke="#64748b" stroke-width="2"/>
+          <polygon points="400,400 390,395 390,405" fill="#64748b"/>
+          <text x="345" y="283" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">소셜</text>
+          
+          <!-- ============ 사업대상자 경로 ============ -->
+          <!-- 마름모: 사업대상자 DB 일치? -->
+          <polygon points="780,240 870,295 780,350 690,295" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="780" y="290" text-anchor="middle" font-size="10" font-weight="500">사업대상자</text>
+          <text x="780" y="307" text-anchor="middle" font-size="10" font-weight="500">DB 일치?</text>
+          
+          <!-- 사업 있음 → 3. 약관동의로 -->
+          <line x1="690" y1="295" x2="620" y2="295" stroke="#64748b" stroke-width="2"/>
+          <line x1="620" y1="295" x2="620" y2="400" stroke="#64748b" stroke-width="2"/>
+          <line x1="620" y1="400" x2="607" y2="400" stroke="#64748b" stroke-width="2"/>
+          <polygon points="600,400 610,395 610,405" fill="#64748b"/>
+          <text x="655" y="283" text-anchor="middle" font-size="9" fill="#16a34a" font-weight="bold">있음</text>
+          
+          <!-- 사업 없음 -->
+          <line x1="870" y1="295" x2="950" y2="295" stroke="#64748b" stroke-width="2"/>
+          <line x1="950" y1="295" x2="950" y2="380" stroke="#64748b" stroke-width="2"/>
+          <polygon points="950,387 945,377 955,377" fill="#64748b"/>
+          <text x="910" y="283" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">없음</text>
+          
+          <rect x="880" y="390" width="140" height="50" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+          <text x="950" y="412" text-anchor="middle" font-size="10" fill="#991b1b">로그인 실패</text>
+          <text x="950" y="430" text-anchor="middle" font-size="9" fill="#991b1b">→ 0번으로</text>
+          
+          <!-- 3. 약관동의 (통합) -->
+          <rect x="400" y="375" width="200" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="500" y="405" text-anchor="middle" font-size="12">3. 약관동의</text>
+          
+          <!-- 3. 약관동의 → 14세 분기 (순서도 안에 포함) -->
+          <line x1="500" y1="425" x2="500" y2="465" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,472 495,462 505,462" fill="#64748b"/>
+          
+          <!-- ★★★ 14세 확인 마름모 (약관동의 바로 다음) ★★★ -->
+          <polygon points="500,475 600,535 500,595 400,535" fill="#fdf2f8" stroke="#ec4899" stroke-width="2"/>
+          <text x="500" y="528" text-anchor="middle" font-size="12" font-weight="600" fill="#be185d">만 14세</text>
+          <text x="500" y="548" text-anchor="middle" font-size="12" font-weight="600" fill="#be185d">미만?</text>
+          
+          <!-- 14세 미만: YES → 아동용 약관 + 법정대리인 동의 (왼쪽) -->
+          <line x1="400" y1="535" x2="270" y2="535" stroke="#ec4899" stroke-width="2"/>
+          <line x1="270" y1="535" x2="270" y2="610" stroke="#ec4899" stroke-width="2"/>
+          <polygon points="270,617 265,607 275,607" fill="#ec4899"/>
+          <text x="335" y="520" text-anchor="middle" font-size="11" fill="#ec4899" font-weight="bold">YES (미만)</text>
+          
+          <!-- 3-1. 아동용 약관 표시 -->
+          <rect x="150" y="620" width="240" height="55" rx="8" fill="#fdf2f8" stroke="#ec4899" stroke-width="2"/>
+          <text x="270" y="645" text-anchor="middle" font-size="11" font-weight="600" fill="#be185d">3-1. 아동용 약관 표시</text>
+          <text x="270" y="665" text-anchor="middle" font-size="9" fill="#9d174d">(법정대리인 동의 문구 포함)</text>
+          
+          <!-- 화살표 -->
+          <line x1="270" y1="675" x2="270" y2="710" stroke="#ec4899" stroke-width="2"/>
+          <polygon points="270,717 265,707 275,707" fill="#ec4899"/>
+          
+          <!-- 4. 본인인증 (14세 미만) -->
+          <rect x="150" y="720" width="240" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="270" y="750" text-anchor="middle" font-size="11">4. 본인인증 (PASS인증)</text>
+          
+          <!-- 화살표 (4. 본인인증 → 4-1. 법정대리인 동의) -->
+          <line x1="270" y1="770" x2="270" y2="810" stroke="#ec4899" stroke-width="2"/>
+          <polygon points="270,817 265,807 275,807" fill="#ec4899"/>
+          <text x="290" y="795" text-anchor="start" font-size="8" fill="#ec4899">↓ 입력</text>
+          
+          <!-- 4-1. 법정대리인 동의 (14세 미만 전용) -->
+          <rect x="120" y="820" width="300" height="90" rx="8" fill="#fdf2f8" stroke="#ec4899" stroke-width="2"/>
+          <text x="270" y="848" text-anchor="middle" font-size="12" font-weight="600" fill="#be185d">4-1. 법정대리인 동의</text>
+          <text x="270" y="870" text-anchor="middle" font-size="10" fill="#9d174d">부모/보호자 본인인증</text>
+          <text x="270" y="888" text-anchor="middle" font-size="10" fill="#9d174d">+ 개인정보 수집 동의</text>
+          <text x="270" y="905" text-anchor="middle" font-size="8" fill="#9d174d" font-style="italic">↓ 완료 후 계정통합 단계로</text>
+          
+          <!-- 14세 미만 경로 → 5-1 계정통합으로 합류 (아래쪽으로) -->
+          <line x1="270" y1="910" x2="270" y2="1005" stroke="#ec4899" stroke-width="2"/>
+          <line x1="270" y1="1005" x2="380" y2="1005" stroke="#64748b" stroke-width="2"/>
+          <polygon points="387,1005 377,1000 377,1010" fill="#64748b"/>
+          <text x="290" y="960" text-anchor="start" font-size="8" fill="#ec4899">↓ 출력</text>
+          
+          <!-- 14세 이상: NO → 일반 약관 + 본인인증 (오른쪽) -->
+          <line x1="600" y1="535" x2="800" y2="535" stroke="#64748b" stroke-width="2"/>
+          <line x1="800" y1="535" x2="800" y2="610" stroke="#64748b" stroke-width="2"/>
+          <polygon points="800,617 795,607 805,607" fill="#64748b"/>
+          <text x="700" y="520" text-anchor="middle" font-size="11" fill="#16a34a" font-weight="bold">NO (이상)</text>
+          
+          <!-- 3-2. 일반 약관 표시 -->
+          <rect x="680" y="620" width="240" height="55" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="800" y="645" text-anchor="middle" font-size="11">3-2. 일반 약관 표시</text>
+          <text x="800" y="665" text-anchor="middle" font-size="9" fill="#64748b">(기존 약관)</text>
+          
+          <!-- 화살표 -->
+          <line x1="800" y1="675" x2="800" y2="710" stroke="#64748b" stroke-width="2"/>
+          <polygon points="800,717 795,707 805,707" fill="#64748b"/>
+          
+          <!-- 4. 본인인증 (14세 이상) -->
+          <rect x="680" y="720" width="240" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="800" y="750" text-anchor="middle" font-size="11">4. 본인인증 (PASS인증)</text>
+          
+          <!-- 14세 이상 경로 → 5-1 계정통합으로 합류 (위쪽으로) -->
+          <line x1="800" y1="770" x2="800" y2="975" stroke="#64748b" stroke-width="2"/>
+          <line x1="800" y1="975" x2="613" y2="975" stroke="#64748b" stroke-width="2"/>
+          <polygon points="606,975 616,970 616,980" fill="#64748b"/>
+          
+          <!-- 5-1. 계정통합 안내 (기본) -->
+          <rect x="390" y="970" width="220" height="60" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+          <text x="500" y="995" text-anchor="middle" font-size="11" font-weight="500">5-1. 계정통합 안내 (기본)</text>
+          <text x="500" y="1017" text-anchor="middle" font-size="10" fill="#64748b">CI 기반으로 보편 DB 검색</text>
+          
+          <!-- 화살표 -->
+          <line x1="500" y1="1030" x2="500" y2="1070" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,1077 495,1067 505,1067" fill="#64748b"/>
+          
+          <!-- 마름모: 보편 DB에 CI 있음? -->
+          <polygon points="500,1080 600,1140 500,1200 400,1140" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+          <text x="500" y="1133" text-anchor="middle" font-size="10" font-weight="500">보편 DB에</text>
+          <text x="500" y="1150" text-anchor="middle" font-size="10" font-weight="500">CI 있음?</text>
+          
+          <!-- CI 있음: 5-2 계정통합 -->
+          <line x1="400" y1="1140" x2="220" y2="1140" stroke="#64748b" stroke-width="2"/>
+          <line x1="220" y1="1140" x2="220" y2="1205" stroke="#64748b" stroke-width="2"/>
+          <polygon points="220,1212 215,1202 225,1202" fill="#64748b"/>
+          <text x="310" y="1128" text-anchor="middle" font-size="10" fill="#16a34a" font-weight="bold">있음</text>
+          
+          <rect x="110" y="1215" width="220" height="55" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+          <text x="220" y="1238" text-anchor="middle" font-size="11" font-weight="500">5-2. 계정통합 안내 (특수)</text>
+          <text x="220" y="1258" text-anchor="middle" font-size="10" fill="#64748b">사용할 ID 선택</text>
+          
+          <!-- CI 없음: 6 개인정보 변경 -->
+          <line x1="600" y1="1140" x2="780" y2="1140" stroke="#64748b" stroke-width="2"/>
+          <line x1="780" y1="1140" x2="780" y2="1205" stroke="#64748b" stroke-width="2"/>
+          <polygon points="780,1212 775,1202 785,1202" fill="#64748b"/>
+          <text x="690" y="1128" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">없음</text>
+          
+          <rect x="670" y="1215" width="220" height="55" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+          <text x="780" y="1238" text-anchor="middle" font-size="11">6. 개인정보 변경 안내</text>
+          <text x="780" y="1258" text-anchor="middle" font-size="10" fill="#64748b">이름, 생년월일, 휴대폰, 성별</text>
+          
+          <!-- 5-2, 6 → 합류 -->
+          <line x1="220" y1="1270" x2="220" y2="1290" stroke="#64748b" stroke-width="2"/>
+          <line x1="780" y1="1270" x2="780" y2="1290" stroke="#64748b" stroke-width="2"/>
+          <line x1="220" y1="1290" x2="780" y2="1290" stroke="#64748b" stroke-width="2"/>
+          <line x1="500" y1="1290" x2="500" y2="1305" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,1312 495,1302 505,1302" fill="#64748b"/>
+          
+          <!-- 7. 생체정보 -->
+          <rect x="370" y="1315" width="260" height="55" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+          <text x="500" y="1338" text-anchor="middle" font-size="12">7. 생체정보</text>
+          <text x="500" y="1358" text-anchor="middle" font-size="10" fill="#64748b">키, 몸무게, 활동계수, 관심보건소</text>
+          
+          <!-- 화살표 -->
+          <line x1="500" y1="1370" x2="500" y2="1400" stroke="#64748b" stroke-width="2"/>
+          <polygon points="500,1407 495,1397 505,1397" fill="#64748b"/>
+          
+          <!-- 8. 가입완료 -->
+          <ellipse cx="500" cy="1430" rx="70" ry="28" fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+          <text x="500" y="1435" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">8. 가입완료 ✓</text>
+          
+          <!-- 범례 박스 (순서도 아래쪽으로 이동) -->
+          <rect x="850" y="800" width="180" height="200" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+          <text x="940" y="828" text-anchor="middle" font-size="13" font-weight="bold" fill="#fbbf24">※ 흐름 요약</text>
+          <line x1="865" y1="840" x2="1015" y2="840" stroke="#475569" stroke-width="1"/>
+          <text x="865" y="865" font-size="10" fill="#f1f5f9">• 보편+ID → 5-1 → 7</text>
+          <text x="865" y="888" font-size="10" fill="#f1f5f9">• 보편+소셜 → 3 → 4</text>
+          <text x="865" y="911" font-size="10" fill="#f1f5f9">• 사업대상자 → 3 → 4</text>
+          <line x1="865" y1="928" x2="1015" y2="928" stroke="#475569" stroke-width="1"/>
+          <text x="865" y="950" font-size="10" fill="#fbbf24" font-weight="bold">🧒 14세 미만:</text>
+          <text x="875" y="970" font-size="9" fill="#f1f5f9">→ 아동용 약관</text>
+          <text x="875" y="988" font-size="9" fill="#f1f5f9">→ 법정대리인 동의</text>
+        </svg>
+      </div>
+    </div>
+    
+    <div class="footer">임시 공유용 페이지 | 공유 완료 후 삭제 예정</div>
+  </div>
+</body>
+</html>

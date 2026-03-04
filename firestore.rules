@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // games 컬렉션: 모든 사용자가 읽기/쓰기 가능
+    match /games/{gameId} {
+      allow read, write: if true;
+    }
+    
+    // predictions 컬렉션: 모든 사용자가 읽기 가능, 쓰기는 인증된 사용자만 (현재는 모두 허용)
+    match /predictions/{predictionId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}
+
+
