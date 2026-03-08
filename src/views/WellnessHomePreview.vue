@@ -12,10 +12,35 @@
           </div>
           <h1>좋은 저녁이에요, 김삼구님 👋</h1>
           <p>기업 건강관리 프로그램 참여 중</p>
+          <p class="mode-caption">현재 {{ modeName }}</p>
         </div>
         <div class="header-actions">
-          <button class="icon-btn" aria-label="Notifications">🔔</button>
-          <div class="avatar">HG</div>
+          <div class="mode-toggle" role="tablist" aria-label="서비스 모드 선택">
+            <button
+              class="mode-btn"
+              :class="{ active: mode === 'thehealth' }"
+              role="tab"
+              :aria-selected="mode === 'thehealth'"
+              @click="switchMode('thehealth')"
+            >
+              더헬스모드
+            </button>
+            <button
+              class="mode-btn"
+              :class="{ active: mode === 'special' }"
+              role="tab"
+              :aria-selected="mode === 'special'"
+              @click="switchMode('special')"
+            >
+              특별모드
+            </button>
+          </div>
+          <button class="alert-icon-btn" aria-label="알림">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4a4 4 0 0 0-4 4v2.6c0 1-.4 2-1.1 2.8L5.5 15h13l-1.4-1.6a4.2 4.2 0 0 1-1.1-2.8V8a4 4 0 0 0-4-4z" />
+              <path d="M10 18a2 2 0 0 0 4 0" />
+            </svg>
+          </button>
         </div>
       </header>
 
@@ -45,6 +70,37 @@
           </div>
         </div>
         <p class="support-text">건강 지표가 안정적으로 잘 관리되고 있어요.</p>
+        <div class="prediction-inline">
+          <span>혈당 급상승 사전예측</span>
+          <strong>2시간 내 상승 가능성 18%</strong>
+          <em>AI 안정권</em>
+        </div>
+      </section>
+
+      <section class="card killer-card">
+        <div class="card-head">
+          <p class="card-title">{{ killerTitle }}</p>
+          <span class="soft-badge">{{ killerBadge }}</span>
+        </div>
+        <div class="killer-grid">
+          <button
+            v-for="item in killerActions"
+            :key="item.title"
+            class="killer-action"
+          >
+            <strong>{{ item.title }}</strong>
+            <span>{{ item.desc }}</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="card streak-card">
+        <div>
+          <p class="card-title">{{ streakTitle }}</p>
+          <p class="streak-value">{{ streakValue }}</p>
+          <p class="muted">{{ streakDesc }}</p>
+        </div>
+        <button class="outline-btn compact">{{ streakButton }}</button>
       </section>
 
       <section class="card program-card">
@@ -62,7 +118,8 @@
           <li>☐ 저당 식단 기록</li>
           <li>☐ 혈당 기록</li>
         </ul>
-        <p class="microcopy">이번 주도 좋은 흐름입니다. 지금처럼 이어가보세요.</p>
+        <p class="microcopy">오늘 미션 1개만 더 완료하면 주간 목표 달성률이 70%가 됩니다.</p>
+        <div class="stability-badge">최근 4주 안정구간 유지율 86%</div>
         <div class="program-actions">
           <button class="primary-btn">미션 완료하기</button>
           <button class="text-btn">진행도 보기</button>
@@ -131,44 +188,161 @@
       </section>
     </section>
 
-    <nav class="bottom-nav">
-      <button class="nav-item active">
-        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M4 11.5L12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />
-        </svg>
-        <span>홈</span>
+    <div v-if="mode === 'special'" class="special-sub-nav">
+      <button
+        v-for="item in specialSubMenu"
+        :key="item.id"
+        class="sub-nav-item"
+        :class="{ active: activeSpecialSub === item.id }"
+        @click="activeSpecialSub = item.id"
+      >
+        {{ item.label }}
       </button>
-      <button class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="4" y="5" width="16" height="14" rx="3" />
-          <path d="M8 10h8M8 14h5" />
-        </svg>
-        <span>프로그램</span>
-      </button>
-      <button class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 19V9M10 19V5M15 19v-8M20 19v-4" />
-        </svg>
-        <span>건강기록</span>
-      </button>
-      <button class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M8.5 11a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zM15.5 20a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z" />
-          <path d="M18.5 18.5L21 21" />
-        </svg>
-        <span>상담</span>
-      </button>
-      <button class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM5 20a7 7 0 0 1 14 0" />
-        </svg>
-        <span>마이페이지</span>
-      </button>
+    </div>
+
+    <nav class="bottom-nav" :class="{ special: mode === 'special' }">
+      <template v-if="mode === 'thehealth'">
+        <button
+          v-for="item in theHealthMenu"
+          :key="item.id"
+          class="nav-item"
+          :class="{ active: activeMainNav === item.id }"
+          @click="handleMainMenuClick(item.id)"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path v-if="item.id === 'home'" d="M4 11.5L12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />
+            <path v-else-if="item.id === 'content'" d="M6 5h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM8 9h8M8 13h8M8 17h5" />
+            <path v-else-if="item.id === 'my'" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM5 20a7 7 0 0 1 14 0" />
+            <path v-else-if="item.id === 'all'" d="M5 5h6v6H5zM13 5h6v6h-6zM5 13h6v6H5zM13 13h6v6h-6z" />
+            <path v-else d="M7 7h4v4H7zM13 13h4v4h-4zM6 14l4 4M14 6l4 4" />
+          </svg>
+          <span>{{ item.label }}</span>
+        </button>
+      </template>
+
+      <template v-else>
+        <button class="nav-item back" @click="goBackToTheHealth">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.5 6L8.5 12l6 6" />
+          </svg>
+          <span>백</span>
+        </button>
+        <button
+          v-for="item in specialMenu"
+          :key="item.id"
+          class="nav-item"
+          :class="{ active: activeSpecialNav === item.id }"
+          @click="activeSpecialNav = item.id"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path v-if="item.id === 'program'" d="M6 5h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM8 10h8M8 14h5" />
+            <path v-else-if="item.id === 'record'" d="M5 19V9M10 19V5M15 19v-8M20 19v-4" />
+            <path v-else-if="item.id === 'consult'" d="M6 7h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-6l-4 3v-3H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z" />
+            <path v-else d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM5 20a7 7 0 0 1 14 0" />
+          </svg>
+          <span>{{ item.label }}</span>
+        </button>
+      </template>
     </nav>
   </main>
 </template>
 
 <script setup>
+import { computed, ref } from 'vue'
+
+const mode = ref('thehealth')
+const activeMainNav = ref('home')
+const activeSpecialNav = ref('program')
+const activeSpecialSub = ref('sugar')
+
+const theHealthMenu = [
+  { id: 'home', label: '홈' },
+  { id: 'content', label: '콘텐츠' },
+  { id: 'my', label: '마이' },
+  { id: 'all', label: '전체' },
+  { id: 'switch', label: '전환테스트' }
+]
+
+const specialMenu = [
+  { id: 'program', label: '프로그램' },
+  { id: 'record', label: '건강기록' },
+  { id: 'consult', label: '상담' },
+  { id: 'mypage', label: '마이페이지' }
+]
+
+const specialSubMenu = [
+  { id: 'sugar', label: '혈당관리' },
+  { id: 'meal', label: '식단' },
+  { id: 'exercise', label: '운동' },
+  { id: 'medication', label: '복약' }
+]
+
+const switchMode = (nextMode) => {
+  mode.value = nextMode
+  if (nextMode === 'special') {
+    activeSpecialNav.value = 'program'
+    activeSpecialSub.value = 'sugar'
+  }
+}
+
+const goBackToTheHealth = () => {
+  mode.value = 'thehealth'
+  activeMainNav.value = 'home'
+}
+
+const handleMainMenuClick = (id) => {
+  if (id === 'switch') {
+    switchMode('special')
+    return
+  }
+  activeMainNav.value = id
+}
+
+const modeName = computed(() =>
+  mode.value === 'thehealth' ? '더헬스모드' : '특별모드'
+)
+
+const killerTitle = computed(() =>
+  mode.value === 'thehealth' ? '오늘의 킬러 포인트' : '특별 케어 킬러 포인트'
+)
+
+const killerBadge = computed(() =>
+  mode.value === 'thehealth' ? 'AI 코칭' : '프리미엄'
+)
+
+const killerActions = computed(() => {
+  if (mode.value === 'special') {
+    return [
+      { title: '식후 급상승 사전 알림', desc: '최근 패턴 기반 위험 시간 안내' },
+      { title: '개인 반응 식단 점수', desc: '오늘 점심 예상 반응 점수 82점' },
+      { title: '전담 코치 프리미엄 케어', desc: '기록 업로드 후 24시간 내 맞춤 피드백' }
+    ]
+  }
+
+  return [
+    { title: '식후 혈당 예측', desc: '식사 사진 1장으로 예측' },
+    { title: '저당 식단 추천', desc: '회사 근처 메뉴 자동 추천' },
+    { title: '3분 위험 체크', desc: '오늘 리스크를 빠르게 점검' }
+  ]
+})
+
+const streakTitle = computed(() =>
+  mode.value === 'thehealth' ? '연속 관리 리워드' : '특별 케어 달성 혜택'
+)
+
+const streakValue = computed(() =>
+  mode.value === 'thehealth' ? '11일 연속 달성' : '이번 달 특별 미션 2/3 완료'
+)
+
+const streakDesc = computed(() =>
+  mode.value === 'thehealth'
+    ? '3일 더 달성하면 건강 리워드 포인트 +500'
+    : '마지막 미션 완료 시 1:1 코칭 1회가 제공됩니다'
+)
+
+const streakButton = computed(() =>
+  mode.value === 'thehealth' ? '리워드 확인' : '특별 혜택 보기'
+)
 </script>
 
 <style scoped>
@@ -244,18 +418,42 @@
   color: #7f8fa5;
 }
 
+.mode-caption {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #6e83a0;
+  font-weight: 600;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
-.icon-btn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #dce6f2;
-  border-radius: 10px;
-  background: #f8fbff;
+.mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: #eef4fb;
+  border: 1px solid #d8e3f1;
+  border-radius: 999px;
+  padding: 1px;
+}
+
+.mode-btn {
+  border: 0;
+  background: transparent;
+  color: #6d8098;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 7px;
+  border-radius: 999px;
+  line-height: 1;
+}
+
+.mode-btn.active {
+  background: #2f79d8;
+  color: #fff;
 }
 
 .avatar {
@@ -270,6 +468,28 @@
   font-size: 12px;
   font-weight: 600;
   color: #1f4f95;
+}
+
+.alert-icon-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #dce6f2;
+  border-radius: 12px;
+  background: #f8fbff;
+  color: #2f6db8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-icon-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .card {
@@ -348,6 +568,36 @@
   color: #66788d;
 }
 
+.prediction-inline {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f3f8ff;
+  border: 1px solid #dfebfb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.prediction-inline span {
+  color: #637a95;
+  font-size: 12px;
+}
+
+.prediction-inline strong {
+  color: #1f4f95;
+  font-size: 14px;
+}
+
+.prediction-inline em {
+  margin-left: auto;
+  font-style: normal;
+  color: #237a41;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .percent {
   color: #2f6db8;
   font-size: 18px;
@@ -398,6 +648,65 @@
   margin-bottom: 10px;
   color: #6882a1;
   font-size: 12px;
+}
+
+.stability-badge {
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #edf8f1;
+  color: #237a41;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.soft-badge {
+  background: #e8f1ff;
+  color: #2f6db8;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.killer-grid {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.killer-action {
+  border: 1px solid #deebfb;
+  background: #f8fbff;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: left;
+}
+
+.killer-action strong {
+  display: block;
+  color: #1d3760;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.killer-action span {
+  color: #7289a5;
+  font-size: 12px;
+}
+
+.streak-card {
+  display: grid;
+  gap: 10px;
+}
+
+.streak-value {
+  font-size: 24px;
+  color: #1f2b3b;
+  font-weight: 800;
+  margin-bottom: 2px;
 }
 
 .program-actions {
@@ -481,6 +790,10 @@
   font-weight: 700;
 }
 
+.outline-btn.compact {
+  margin-top: 0;
+}
+
 .medication-text {
   margin: 2px 0 10px;
   color: #2a4767;
@@ -541,8 +854,8 @@
 }
 
 .nav-icon {
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
   stroke: currentColor;
   fill: none;
   stroke-width: 1.8;
@@ -550,23 +863,61 @@
   stroke-linejoin: round;
 }
 
+.nav-item.back {
+  color: #5e6e84;
+}
+
 .nav-item.active {
   color: #2f79d8;
   font-weight: 700;
 }
 
-.nav-item.active .nav-icon {
-  filter: drop-shadow(0 1px 1px rgba(47, 121, 216, 0.18));
+.bottom-nav.special {
+  grid-template-columns: 0.9fr repeat(4, 1fr);
+}
+
+.special-sub-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 70px;
+  max-width: 390px;
+  margin: 0 auto;
+  background: #f8fbff;
+  border-top: 1px solid #e3ebf6;
+  border-bottom: 1px solid #e3ebf6;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 6px 8px;
+  z-index: 10;
+}
+
+.sub-nav-item {
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  color: #8a9ab0;
+  font-weight: 600;
+  padding: 4px 2px;
+}
+
+.sub-nav-item.active {
+  color: #2f79d8;
+  font-weight: 700;
 }
 
 @media (max-width: 420px) {
   .phone-shell {
     max-width: 100%;
     min-height: 100vh;
-    padding-bottom: 90px;
+    padding-bottom: 118px;
   }
 
   .bottom-nav {
+    max-width: none;
+  }
+
+  .special-sub-nav {
     max-width: none;
   }
 }
