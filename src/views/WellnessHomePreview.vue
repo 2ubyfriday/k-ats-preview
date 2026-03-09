@@ -71,9 +71,9 @@
         </div>
         <p class="support-text">건강 지표가 안정적으로 잘 관리되고 있어요.</p>
         <div class="prediction-inline">
-          <span>혈당 급상승 사전예측</span>
+          <span>식사 후 혈당 오를 가능성 미리보기</span>
           <strong>2시간 내 상승 가능성 18%</strong>
-          <em>AI 안정권</em>
+          <em>현재 안정 구간</em>
         </div>
       </section>
 
@@ -130,27 +130,48 @@
         <p class="card-title">건강 데이터 스냅샷</p>
         <div class="horizontal-scroll">
           <article class="mini-chart-card">
-            <p>최근 7일 혈당 추이</p>
+            <div class="mini-head">
+              <p>혈당 추이</p>
+              <span class="trend-chip good">좋음</span>
+            </div>
             <div class="mini-chart">
               <svg viewBox="0 0 100 44" preserveAspectRatio="none">
                 <polyline points="0,30 15,28 30,32 45,24 60,26 75,18 100,20" />
               </svg>
             </div>
+            <div class="mini-foot">
+              <span class="period-tag">기준: 최근 7일</span>
+              <span class="status-text up">안정적 추세</span>
+            </div>
           </article>
           <article class="mini-chart-card">
-            <p>체중 추이</p>
+            <div class="mini-head">
+              <p>체중 추이</p>
+              <span class="trend-chip good">좋음</span>
+            </div>
             <div class="mini-chart">
               <svg viewBox="0 0 100 44" preserveAspectRatio="none">
                 <polyline points="0,20 20,19 40,18 60,19 80,17 100,16" />
               </svg>
             </div>
+            <div class="mini-foot">
+              <span class="period-tag">기준: 최근 4주</span>
+              <span class="status-text up">완만한 감소</span>
+            </div>
           </article>
           <article class="mini-chart-card">
-            <p>평균 수면 시간</p>
+            <div class="mini-head">
+              <p>평균 수면 시간</p>
+              <span class="trend-chip warn">주의</span>
+            </div>
             <div class="mini-chart">
               <svg viewBox="0 0 100 44" preserveAspectRatio="none">
                 <polyline points="0,28 15,25 30,27 45,21 60,24 75,19 100,22" />
               </svg>
+            </div>
+            <div class="mini-foot">
+              <span class="period-tag">기준: 최근 7일</span>
+              <span class="status-text down">변동 큼</span>
             </div>
           </article>
         </div>
@@ -303,7 +324,7 @@ const modeName = computed(() =>
 )
 
 const killerTitle = computed(() =>
-  mode.value === 'thehealth' ? '오늘의 킬러 포인트' : '특별 케어 킬러 포인트'
+  mode.value === 'thehealth' ? '오늘의 추천 기능' : '특별모드 추천 기능'
 )
 
 const killerBadge = computed(() =>
@@ -313,9 +334,9 @@ const killerBadge = computed(() =>
 const killerActions = computed(() => {
   if (mode.value === 'special') {
     return [
-      { title: '식후 급상승 사전 알림', desc: '최근 패턴 기반 위험 시간 안내' },
-      { title: '개인 반응 식단 점수', desc: '오늘 점심 예상 반응 점수 82점' },
-      { title: '전담 코치 프리미엄 케어', desc: '기록 업로드 후 24시간 내 맞춤 피드백' }
+      { title: '식후 혈당 미리보기', desc: '식사 후 혈당이 오를 가능성을 미리 안내' },
+      { title: '맞춤 식사 점수', desc: '오늘 점심 점수 82점 (내 기록 기준)' },
+      { title: '전담 코치 피드백', desc: '기록 업로드 후 24시간 내 답변' }
     ]
   }
 
@@ -327,7 +348,7 @@ const killerActions = computed(() => {
 })
 
 const streakTitle = computed(() =>
-  mode.value === 'thehealth' ? '연속 관리 리워드' : '특별 케어 달성 혜택'
+  mode.value === 'thehealth' ? '연속 관리 리워드' : '특별모드 달성 혜택'
 )
 
 const streakValue = computed(() =>
@@ -756,6 +777,31 @@ const streakButton = computed(() =>
   color: #48617f;
 }
 
+.mini-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.trend-chip {
+  border-radius: 999px;
+  padding: 3px 7px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.trend-chip.good {
+  background: #e8f6ee;
+  color: #237a41;
+}
+
+.trend-chip.warn {
+  background: #fff4e8;
+  color: #b06718;
+}
+
 .mini-chart {
   margin-top: 8px;
   height: 50px;
@@ -773,6 +819,32 @@ const streakButton = computed(() =>
   fill: none;
   stroke: #3c89e8;
   stroke-width: 2;
+}
+
+.mini-foot {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.period-tag {
+  font-size: 10px;
+  color: #7b8ea6;
+}
+
+.status-text {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.status-text.up {
+  color: #237a41;
+}
+
+.status-text.down {
+  color: #b06718;
 }
 
 .report-link {
