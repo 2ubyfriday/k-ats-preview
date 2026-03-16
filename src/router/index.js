@@ -6,7 +6,11 @@ import WellnessHomePreview from '../views/WellnessHomePreview.vue'
 const routes = [
   {
     path: '/',
-    name: 'WellnessHome',
+    redirect: '/wellness-flow/1'
+  },
+  {
+    path: '/wellness-flow/:step(\\d+)',
+    name: 'WellnessFlowStep',
     component: WellnessHomePreview
   },
   {
@@ -21,8 +25,7 @@ const routes = [
   },
   {
     path: '/wellness-preview',
-    name: 'WellnessPreview',
-    component: WellnessHomePreview
+    redirect: '/wellness-flow/1'
   }
 ]
 
