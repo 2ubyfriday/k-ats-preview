@@ -1,7 +1,7 @@
 <template>
-  <main class="preview-page">
-    <section class="phone-shell">
-      <section class="flow-header card">
+  <main class="preview-page" :class="{ 'is-nds-home': currentScreen === 6 }">
+    <section class="phone-shell" :class="{ 'home-only': currentScreen === 6 }">
+      <section v-if="currentScreen !== 6" class="flow-header card">
         <p class="flow-title">기업 건강관리 UX 플로우</p>
         <p class="flow-sub">온보딩부터 프로그램 참여까지 8개 주요 화면</p>
         <div class="flow-steps">
@@ -86,75 +86,200 @@
             <button class="primary-btn" @click="nextScreen">View Recommended Program</button>
           </section>
 
-          <section v-else-if="currentScreen === 6" class="screen-stack">
-            <section class="card hero-header">
-              <div>
-                <p class="greeting">OO님, 오늘 건강 상태를 확인해보세요</p>
-                <p class="body-text">최근 검진 기반 개인 맞춤 리포트</p>
-              </div>
-              <div class="icon-row">
-                <button class="icon-btn" aria-label="notification">🔔</button>
-                <button class="icon-btn" aria-label="profile">👤</button>
-              </div>
-            </section>
+          <section v-else-if="currentScreen === 6" class="nds-home">
+            <div class="nds-status" aria-hidden="true">
+              <span>9:41</span>
+              <span class="nds-status-icons">
+                <span class="nds-signal" />
+                <span class="nds-wifi" />
+                <span class="nds-battery" />
+              </span>
+            </div>
 
-            <section class="card">
-              <p class="screen-label">SCREEN 6 · HOME DASHBOARD</p>
-              <h3 class="card-title">Hero Health Card</h3>
-              <p class="score-big">74점 · C 단계</p>
-              <div class="risk-chart small">
-                <div class="risk-track"></div>
-                <div class="risk-stops">
-                  <span v-for="(label, idx) in riskLabels" :key="`home-${label}`" :class="{ active: idx === riskIndex }">
-                    {{ label }}
-                  </span>
+            <header class="nds-appbar">
+              <span class="nds-brand">nDS Health</span>
+              <div class="nds-appbar-actions">
+                <button
+                  type="button"
+                  class="nds-toggle"
+                  :class="{ on: homeToggle }"
+                  aria-label="모드 전환"
+                  @click="homeToggle = !homeToggle"
+                >
+                  <span class="nds-toggle-knob" />
+                </button>
+                <button type="button" class="nds-icon-circle" aria-label="알림">
+                  <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <path
+                      d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1z"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </header>
+
+            <div class="nds-subbar">
+              <span class="nds-subbar-title">홈</span>
+              <div class="nds-subbar-right">
+                <span class="nds-subbar-divider" aria-hidden="true" />
+                <div class="nds-subbar-icons">
+                  <button type="button" class="nds-icon-plain" aria-label="블루투스">
+                    <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                      <path
+                        d="M12 3v7l4-3-4-4zm0 7l-4 3 4 4v-7zm0 7v5M8.5 8.5l7 7M15.5 8.5l-7 7"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button type="button" class="nds-icon-plain" aria-label="설정">
+                    <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                      <path
+                        d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"
+                        stroke-width="1.5"
+                      />
+                      <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                        stroke-width="1.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                <div class="risk-pointer" :style="{ left: `${(riskIndex / (riskLabels.length - 1)) * 100}%` }"></div>
               </div>
-              <p class="body-text">최근 건강검진 결과 기준 생활습관 관리가 필요합니다.</p>
-            </section>
+            </div>
 
-            <section class="card">
-              <h3 class="card-title">Key Health Indicators</h3>
-              <div class="indicator-list">
-                <article v-for="item in indicators" :key="item.name" class="indicator-row">
-                  <div>
-                    <p class="indicator-name">{{ item.name }}</p>
-                    <p class="indicator-value">{{ item.value }}</p>
+            <button type="button" class="nds-announce">
+              <span class="nds-announce-ico" aria-hidden="true">📢</span>
+              <span class="nds-announce-text">
+                공지가 있다면 이곳에 텍스트로 노출. 선택 가능. 한줄만...
+              </span>
+              <span class="nds-chevron" aria-hidden="true">›</span>
+            </button>
+
+            <article class="nds-metric-card card">
+              <div class="nds-metric-grid">
+                <div class="nds-metric-col nds-metric-glucose">
+                  <div class="nds-metric-head">
+                    <span class="nds-metric-label">혈당</span>
+                    <button type="button" class="nds-refresh" aria-label="새로고침">
+                      <svg class="nds-svg-sm" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M4 12a8 8 0 0 1 14.5-4M20 12a8 8 0 0 1-14.5 4M4 12h3m13 0h-3M12 4v3m0 13v-3"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </button>
+                    <span class="nds-metric-time">방금 전</span>
                   </div>
-                  <p class="indicator-tag" :class="item.statusClass">{{ item.interpretation }}</p>
+                  <button type="button" class="nds-dropdown">
+                    공복혈당
+                    <span class="nds-caret">▼</span>
+                  </button>
+                  <p class="nds-value-row">
+                    <span class="nds-value-num">140</span>
+                    <span class="nds-value-unit">mg/dL</span>
+                  </p>
+                  <p class="nds-status-tag danger">높음</p>
+                  <div class="nds-glucose-accent" aria-hidden="true" />
+                </div>
+                <div class="nds-metric-divider" aria-hidden="true" />
+                <div class="nds-metric-col">
+                  <div class="nds-metric-head">
+                    <span class="nds-metric-label">식사</span>
+                    <button type="button" class="nds-refresh" aria-label="새로고침">
+                      <svg class="nds-svg-sm" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M4 12a8 8 0 0 1 14.5-4M20 12a8 8 0 0 1-14.5 4M4 12h3m13 0h-3M12 4v3m0 13v-3"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </button>
+                    <span class="nds-metric-time">방금 전</span>
+                  </div>
+                  <p class="nds-value-row meal">
+                    <span class="nds-value-num">1,200</span>
+                    <span class="nds-value-unit">kcal</span>
+                  </p>
+                  <div class="nds-macros">
+                    <span class="nds-macro-chip">탄 400g</span>
+                    <span class="nds-macro-chip">당 10g</span>
+                  </div>
+                </div>
+              </div>
+              <div class="nds-metric-foot">
+                <div class="nds-tags">
+                  <span># 혈당 상승</span>
+                  <span># 식사유의</span>
+                </div>
+                <div class="nds-chart-icons">
+                  <button type="button" class="nds-mini-chart" aria-label="막대 차트">
+                    <svg viewBox="0 0 24 24" class="nds-svg-sm" aria-hidden="true">
+                      <path d="M5 19V9M10 19V5M15 19v-6M20 19v-3" fill="none" stroke="currentColor" stroke-width="1.8" />
+                    </svg>
+                  </button>
+                  <button type="button" class="nds-mini-chart" aria-label="추이 차트">
+                    <svg viewBox="0 0 24 24" class="nds-svg-sm" aria-hidden="true">
+                      <path d="M4 16l4-4 4 3 8-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="nds-coach card">
+              <h3 class="nds-section-title">1:1 건강코치 코멘트</h3>
+              <p class="nds-coach-body">
+                식후에 혈당이 조금 높게 올라간 게 보여요. 오늘 식사에서 탄수화물이 조금 많았을 수도 있어서, 다음에는 양을 살짝만 조절해 보시면 좋을 것 같아요.
+              </p>
+            </article>
+
+            <article class="nds-goal card">
+              <div class="nds-goal-left">
+                <p class="nds-goal-d">D-28</p>
+                <p class="nds-goal-name">홍길동 님</p>
+                <p class="nds-goal-target">혈당 10 mg/dL 낮추기</p>
+                <p class="nds-goal-week">1주차</p>
+              </div>
+              <div class="nds-goal-gauge">
+                <div class="nds-gauge-wrap">
+                  <div class="nds-gauge-arc" aria-hidden="true">
+                    <div class="nds-gauge-disk" />
+                  </div>
+                  <div class="nds-gauge-center">
+                    <span class="nds-gauge-pct">0%</span>
+                    <span class="nds-gauge-label">오늘 달성률</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <section class="nds-mission-section">
+              <h3 class="nds-section-title">오늘의 미션</h3>
+              <div class="nds-mission-scroll">
+                <article class="nds-mission-card card">
+                  <p class="nds-mission-placeholder">오늘의 미션 내용이 이곳에 표시됩니다.</p>
+                  <div class="nds-mission-btns">
+                    <button type="button" class="nds-btn-outline">아니오</button>
+                    <button type="button" class="nds-btn-solid">네</button>
+                  </div>
+                </article>
+                <article class="nds-mission-card card nds-mission-peek">
+                  <p class="nds-mission-tag"># 수면</p>
+                  <p class="nds-mission-peek-text">오늘은...</p>
                 </article>
               </div>
-            </section>
-
-            <section class="card">
-              <h3 class="card-title">Health Improvement Prediction</h3>
-              <p class="predict-main">현재 HbA1c 6.0% → 프로그램 후 5.5% 예상</p>
-              <p class="body-text">생활습관 관리 프로그램 참여 시 건강 개선 가능성이 있습니다.</p>
-            </section>
-
-            <section class="card">
-              <h3 class="card-title">Recommended Health Program</h3>
-              <p class="program-title">4주 생활습관 개선 프로그램</p>
-              <ul class="program-list">
-                <li>걷기 미션</li>
-                <li>식사 기록</li>
-                <li>건강 데이터 모니터링</li>
-                <li>건강 코칭</li>
-              </ul>
-              <button class="primary-btn" @click="goToScreen(7)">Start Health Program</button>
-            </section>
-
-            <section class="card">
-              <h3 class="card-title">Today's Health Mission</h3>
-              <ul class="mission-list">
-                <li v-for="mission in todayMissions" :key="mission.id">
-                  <label>
-                    <input type="checkbox" :checked="mission.done" />
-                    <span>{{ mission.text }}</span>
-                  </label>
-                </li>
-              </ul>
             </section>
           </section>
 
@@ -186,7 +311,7 @@
         </section>
       </Transition>
 
-      <section class="flow-actions card">
+      <section v-if="currentScreen !== 6" class="flow-actions card">
         <button class="ghost-btn" :disabled="currentScreen === 1" @click="prevScreen">이전</button>
         <button class="ghost-btn" :disabled="currentScreen === totalScreens" @click="nextScreen">다음</button>
       </section>
@@ -213,6 +338,7 @@ const totalScreens = 8
 const route = useRoute()
 const router = useRouter()
 const transitionName = ref('slide-forward')
+const homeToggle = ref(false)
 const selectedImport = ref('corp')
 const riskLabels = ['A', 'C', 'D', 'High Risk']
 const riskIndex = 1
@@ -266,9 +392,10 @@ const bottomNav = [
 ]
 
 const activeNav = computed(() => {
+  if (currentScreen.value === 6) return 'home'
   if (currentScreen.value === 7) return 'management'
   if (currentScreen.value === 8) return 'mypage'
-  if (currentScreen.value >= 5 && currentScreen.value <= 6) return 'checkup'
+  if (currentScreen.value === 5) return 'checkup'
   return 'home'
 })
 
@@ -316,10 +443,602 @@ const prevScreen = () => {
   color: #181b20;
 }
 
+.preview-page.is-nds-home {
+  background: #f2f4f8;
+}
+
 .phone-shell {
   width: min(100%, 375px);
   margin: 0 auto;
   padding: 16px 14px 112px;
+}
+
+.phone-shell.home-only {
+  padding-top: 8px;
+}
+
+/* —— nDS Health home (screen 6) —— */
+.nds-home {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nds-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
+
+.nds-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nds-signal {
+  width: 18px;
+  height: 10px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #111 0 20%, transparent 20% 40%, #111 40% 60%, transparent 60% 80%, #111 80%);
+  opacity: 0.85;
+}
+
+.nds-wifi {
+  width: 14px;
+  height: 10px;
+  border: 2px solid #111;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  opacity: 0.85;
+}
+
+.nds-battery {
+  width: 22px;
+  height: 10px;
+  border: 1.5px solid #111;
+  border-radius: 2px;
+  position: relative;
+  opacity: 0.85;
+}
+
+.nds-battery::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 2px;
+  width: 2px;
+  height: 6px;
+  background: #111;
+  border-radius: 0 1px 1px 0;
+}
+
+.nds-appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 2px 10px;
+}
+
+.nds-brand {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111827;
+}
+
+.nds-appbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nds-toggle {
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #e5e7eb;
+  padding: 2px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.nds-toggle.on {
+  background: #c7d2fe;
+  border-color: #a5b4fc;
+}
+
+.nds-toggle-knob {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease;
+}
+
+.nds-toggle.on .nds-toggle-knob {
+  transform: translateX(18px);
+}
+
+.nds-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+}
+
+.nds-svg {
+  width: 22px;
+  height: 22px;
+}
+
+.nds-svg-sm {
+  width: 18px;
+  height: 18px;
+}
+
+.nds-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 12px;
+  gap: 12px;
+}
+
+.nds-subbar-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #111827;
+}
+
+.nds-subbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nds-subbar-divider {
+  width: 1px;
+  height: 22px;
+  background: #e5e7eb;
+  flex-shrink: 0;
+}
+
+.nds-subbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nds-icon-plain {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.nds-icon-plain:active {
+  background: #e5e7eb;
+}
+
+.nds-announce {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 14px;
+  background: #e8eaef;
+  text-align: left;
+  margin-bottom: 2px;
+}
+
+.nds-announce-ico {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.nds-announce-text {
+  flex: 1;
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nds-chevron {
+  font-size: 18px;
+  color: #9ca3af;
+  font-weight: 300;
+}
+
+.nds-metric-card {
+  padding: 14px 14px 12px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+  border: 1px solid #eef0f4;
+}
+
+.nds-metric-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+.nds-metric-col {
+  padding: 4px 8px 8px;
+  position: relative;
+}
+
+.nds-metric-glucose {
+  padding-bottom: 10px;
+}
+
+.nds-metric-divider {
+  width: 1px;
+  background: #eceef2;
+  margin: 4px 0 8px;
+}
+
+.nds-metric-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.nds-metric-label {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.nds-refresh {
+  border: 0;
+  background: transparent;
+  color: #9ca3af;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.nds-metric-time {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-left: auto;
+}
+
+.nds-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.nds-caret {
+  font-size: 9px;
+  color: #9ca3af;
+}
+
+.nds-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 2px 0 4px;
+}
+
+.nds-value-row.meal {
+  margin-top: 28px;
+}
+
+.nds-value-num {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #111827;
+  line-height: 1;
+}
+
+.nds-value-unit {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.nds-status-tag {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.nds-status-tag.danger {
+  color: #dc2626;
+}
+
+.nds-glucose-accent {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e879f9, #a855f7, #6366f1);
+}
+
+.nds-macros {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.nds-macro-chip {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 5px 8px;
+  border-radius: 8px;
+}
+
+.nds-metric-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.nds-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6366f1;
+}
+
+.nds-chart-icons {
+  display: flex;
+  gap: 4px;
+}
+
+.nds-mini-chart {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fafafa;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nds-section-title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #111827;
+  margin: 0 0 8px;
+}
+
+.nds-coach {
+  padding: 16px;
+  border: 1px solid #eef0f4;
+}
+
+.nds-coach-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #4b5563;
+}
+
+.nds-goal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #eef0f4;
+}
+
+.nds-goal-d {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6366f1;
+  margin: 0 0 4px;
+}
+
+.nds-goal-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.nds-goal-target {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 4px;
+  line-height: 1.35;
+}
+
+.nds-goal-week {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.nds-goal-gauge {
+  flex-shrink: 0;
+}
+
+.nds-gauge-wrap {
+  position: relative;
+  width: 118px;
+  height: 72px;
+}
+
+.nds-gauge-arc {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 58px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nds-gauge-disk {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  bottom: -58px;
+  transform: translateX(-50%);
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #facc15 0deg 58deg,
+    #4ade80 58deg 116deg,
+    #1e3a8a 116deg 180deg,
+    #e5e7eb 180deg 360deg
+  );
+}
+
+.nds-gauge-center {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.nds-gauge-pct {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.1;
+}
+
+.nds-gauge-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.nds-mission-section {
+  margin-top: 4px;
+}
+
+.nds-mission-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nds-mission-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.nds-mission-card {
+  flex: 0 0 calc(100% - 48px);
+  min-width: calc(100% - 48px);
+  scroll-snap-align: start;
+  padding: 16px;
+  border: 1px solid #eef0f4;
+}
+
+.nds-mission-peek {
+  flex: 0 0 72px;
+  min-width: 72px;
+  opacity: 0.92;
+  background: #fafafa;
+}
+
+.nds-mission-placeholder {
+  min-height: 56px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.nds-mission-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.nds-btn-outline {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid #6366f1;
+  background: #fff;
+  color: #6366f1;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.nds-btn-solid {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 0;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.nds-mission-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6366f1;
+  margin: 0 0 6px;
+}
+
+.nds-mission-peek-text {
+  margin: 0;
+  font-size: 12px;
+  color: #9ca3af;
 }
 
 .card {
