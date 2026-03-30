@@ -87,15 +87,6 @@
           </section>
 
           <section v-else-if="currentScreen === 6" class="nds-home">
-            <div class="nds-status" aria-hidden="true">
-              <span>9:41</span>
-              <span class="nds-status-icons">
-                <span class="nds-signal" />
-                <span class="nds-wifi" />
-                <span class="nds-battery" />
-              </span>
-            </div>
-
             <header class="nds-appbar">
               <span class="nds-brand">nDS Health</span>
               <div class="nds-appbar-actions">
@@ -103,9 +94,10 @@
                   type="button"
                   class="nds-toggle"
                   :class="{ on: homeToggle }"
-                  aria-label="모드 전환"
+                  aria-label="건강경영 모드 전환"
                   @click="homeToggle = !homeToggle"
                 >
+                  <span class="nds-toggle-text">건강경영</span>
                   <span class="nds-toggle-knob" />
                 </button>
                 <button type="button" class="nds-icon-circle" aria-label="알림">
@@ -163,65 +155,72 @@
             </button>
 
             <article class="nds-metric-card card">
-              <div class="nds-metric-grid">
-                <div class="nds-metric-col nds-metric-glucose">
+              <div class="nds-metric-tabs" role="tablist" aria-label="건강 데이터 탭">
+                <button
+                  v-for="(panel, idx) in metricPanels"
+                  :key="panel.id"
+                  type="button"
+                  class="nds-metric-tab"
+                  :class="{ active: activeMetricPanel === idx }"
+                  role="tab"
+                  :aria-label="`${panel.title} 보기`"
+                  @click="goToMetricPanel(idx)"
+                >
+                  {{ panel.title }}
+                </button>
+              </div>
+
+              <div
+                ref="metricCarouselRef"
+                class="nds-metric-carousel"
+                @scroll.passive="handleMetricScroll"
+                @touchstart.passive="onMetricTouchStart"
+                @touchend="onMetricTouchEnd"
+              >
+                <section
+                  v-for="panel in metricPanels"
+                  :key="panel.id"
+                  class="nds-metric-slide"
+                  :class="{ 'nds-metric-glucose': panel.id === 'glucose' }"
+                >
                   <div class="nds-metric-head">
-                    <span class="nds-metric-label">혈당</span>
-                    <button type="button" class="nds-refresh" aria-label="새로고침">
-                      <svg class="nds-svg-sm" viewBox="0 0 24 24" aria-hidden="true">
-                        <path
-                          d="M4 12a8 8 0 0 1 14.5-4M20 12a8 8 0 0 1-14.5 4M4 12h3m13 0h-3M12 4v3m0 13v-3"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                        />
-                      </svg>
-                    </button>
-                    <span class="nds-metric-time">방금 전</span>
+                    <span class="nds-metric-label">{{ panel.title }}</span>
+                    <span class="nds-metric-right">
+                      <span class="nds-metric-time">방금 전</span>
+                      <button type="button" class="nds-refresh" aria-label="새로고침">
+                        <svg class="nds-svg-sm" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M4 12a8 8 0 0 1 14.5-4M20 12a8 8 0 0 1-14.5 4M4 12h3m13 0h-3M12 4v3m0 13v-3"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </button>
+                    </span>
                   </div>
-                  <button type="button" class="nds-dropdown">
-                    공복혈당
+                  <button v-if="panel.dropdown" type="button" class="nds-dropdown">
+                    {{ panel.dropdown }}
                     <span class="nds-caret">▼</span>
                   </button>
-                  <p class="nds-value-row">
-                    <span class="nds-value-num">140</span>
-                    <span class="nds-value-unit">mg/dL</span>
-                  </p>
-                  <p class="nds-status-tag danger">높음</p>
-                  <div class="nds-glucose-accent" aria-hidden="true" />
-                </div>
-                <div class="nds-metric-divider" aria-hidden="true" />
-                <div class="nds-metric-col">
-                  <div class="nds-metric-head">
-                    <span class="nds-metric-label">식사</span>
-                    <button type="button" class="nds-refresh" aria-label="새로고침">
-                      <svg class="nds-svg-sm" viewBox="0 0 24 24" aria-hidden="true">
-                        <path
-                          d="M4 12a8 8 0 0 1 14.5-4M20 12a8 8 0 0 1-14.5 4M4 12h3m13 0h-3M12 4v3m0 13v-3"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                        />
-                      </svg>
-                    </button>
-                    <span class="nds-metric-time">방금 전</span>
+                  <div class="nds-value-wrap">
+                    <p class="nds-value-row" :class="{ meal: panel.id === 'meal' }">
+                      <span class="nds-value-num">{{ panel.value }}</span>
+                      <span class="nds-value-unit">{{ panel.unit }}</span>
+                    </p>
+                    <p v-if="panel.status" class="nds-status-side" :class="panel.statusClass">{{ panel.status }}</p>
                   </div>
-                  <p class="nds-value-row meal">
-                    <span class="nds-value-num">1,200</span>
-                    <span class="nds-value-unit">kcal</span>
-                  </p>
-                  <div class="nds-macros">
-                    <span class="nds-macro-chip">탄 400g</span>
-                    <span class="nds-macro-chip">당 10g</span>
+                  <div v-if="panel.macros?.length" class="nds-macros">
+                    <span v-for="macro in panel.macros" :key="macro" class="nds-macro-chip">{{ macro }}</span>
                   </div>
-                </div>
+                  <div v-if="panel.id === 'glucose'" class="nds-glucose-accent" aria-hidden="true" />
+                </section>
               </div>
+
               <div class="nds-metric-foot">
                 <div class="nds-tags">
-                  <span># 혈당 상승</span>
-                  <span># 식사유의</span>
+                  <span v-for="tag in activeMetric.tags" :key="tag"># {{ tag }}</span>
                 </div>
                 <div class="nds-chart-icons">
                   <button type="button" class="nds-mini-chart" aria-label="막대 차트">
@@ -253,31 +252,53 @@
                 <p class="nds-goal-week">1주차</p>
               </div>
               <div class="nds-goal-gauge">
+                <p class="nds-goal-rate-title">오늘 달성률</p>
                 <div class="nds-gauge-wrap">
-                  <div class="nds-gauge-arc" aria-hidden="true">
-                    <div class="nds-gauge-disk" />
-                  </div>
-                  <div class="nds-gauge-center">
-                    <span class="nds-gauge-pct">0%</span>
-                    <span class="nds-gauge-label">오늘 달성률</span>
-                  </div>
+                  <svg class="nds-gauge-svg" viewBox="0 0 64 64" aria-hidden="true">
+                    <circle class="nds-gauge-track" cx="32" cy="32" r="26" />
+                    <circle
+                      class="nds-gauge-value"
+                      cx="32"
+                      cy="32"
+                      r="26"
+                      :style="{ strokeDasharray: gaugeCircumference, strokeDashoffset: gaugeOffset }"
+                    />
+                  </svg>
+                  <span class="nds-gauge-pct">{{ goalRate }}%</span>
                 </div>
+                <p class="nds-gauge-label">달성</p>
               </div>
             </article>
 
             <section class="nds-mission-section">
               <h3 class="nds-section-title">오늘의 미션</h3>
-              <div class="nds-mission-scroll">
-                <article class="nds-mission-card card">
-                  <p class="nds-mission-placeholder">오늘의 미션 내용이 이곳에 표시됩니다.</p>
+              <div class="nds-mission-dots" aria-hidden="true">
+                <span
+                  v-for="(_, idx) in missionCards"
+                  :key="`mission-dot-${idx}`"
+                  class="nds-dot"
+                  :class="{ active: activeMissionCard === idx }"
+                />
+              </div>
+              <div
+                ref="missionCarouselRef"
+                class="nds-mission-scroll"
+                @scroll.passive="handleMissionScroll"
+                @touchstart.passive="onMissionTouchStart"
+                @touchend="onMissionTouchEnd"
+              >
+                <article
+                  v-for="(mission, idx) in missionCards"
+                  :key="mission.id"
+                  class="nds-mission-card card"
+                  @click="goToMissionCard(idx)"
+                >
+                  <p class="nds-mission-tag"># {{ mission.tag }}</p>
+                  <p class="nds-mission-placeholder">{{ mission.text }}</p>
                   <div class="nds-mission-btns">
-                    <button type="button" class="nds-btn-outline">아니오</button>
-                    <button type="button" class="nds-btn-solid">네</button>
+                    <button type="button" class="nds-btn-outline">{{ mission.leftAction }}</button>
+                    <button type="button" class="nds-btn-solid">{{ mission.rightAction }}</button>
                   </div>
-                </article>
-                <article class="nds-mission-card card nds-mission-peek">
-                  <p class="nds-mission-tag"># 수면</p>
-                  <p class="nds-mission-peek-text">오늘은...</p>
                 </article>
               </div>
             </section>
@@ -324,6 +345,28 @@
         class="nav-item"
         :class="{ active: activeNav === item.id }"
       >
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            v-if="item.id === 'management'"
+            d="M4 19V10M9 19V6M14 19v-8M19 19v-4"
+          />
+          <path
+            v-else-if="item.id === 'program'"
+            d="M6 5h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM8 10h8M8 14h5"
+          />
+          <path
+            v-else-if="item.id === 'record'"
+            d="M12 3v18M4 12h16M6 6h4v4H6zM14 14h4v4h-4z"
+          />
+          <path
+            v-else-if="item.id === 'med'"
+            d="M8 7l9 9M10 5l9 9M6.8 11.2a4 4 0 1 1 5.7-5.7l1.4 1.4a4 4 0 1 1-5.7 5.7zM14.2 18.8a4 4 0 1 1 5.7-5.7l-1.4-1.4a4 4 0 1 1-5.7 5.7z"
+          />
+          <path
+            v-else
+            d="M6 7h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-6l-4 3v-3H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"
+          />
+        </svg>
         {{ item.label }}
       </button>
     </nav>
@@ -338,10 +381,70 @@ const totalScreens = 8
 const route = useRoute()
 const router = useRouter()
 const transitionName = ref('slide-forward')
-const homeToggle = ref(false)
+const homeToggle = ref(true)
+const metricCarouselRef = ref(null)
+const missionCarouselRef = ref(null)
+const activeMetricPanel = ref(0)
+const activeMissionCard = ref(0)
+const metricTouchStartX = ref(0)
+const metricTouchStartIdx = ref(0)
+const missionTouchStartX = ref(0)
+const missionTouchStartIdx = ref(0)
+const goalRate = ref(62)
 const selectedImport = ref('corp')
 const riskLabels = ['A', 'C', 'D', 'High Risk']
 const riskIndex = 1
+const gaugeCircumference = 2 * Math.PI * 26
+const gaugeOffset = computed(() => gaugeCircumference - (goalRate.value / 100) * gaugeCircumference)
+
+const metricPanels = [
+  {
+    id: 'glucose',
+    title: '혈당',
+    dropdown: '공복혈당',
+    value: '140',
+    unit: 'mg/dL',
+    status: '높음',
+    statusClass: 'danger',
+    tags: ['혈당 상승', '식사유의']
+  },
+  {
+    id: 'meal',
+    title: '식사',
+    value: '1,200',
+    unit: 'kcal',
+    macros: ['탄 400g', '당 10g'],
+    tags: ['식사기록', '영양관리']
+  },
+  {
+    id: 'pressure',
+    title: '혈압',
+    value: '128/84',
+    unit: 'mmHg',
+    status: '높음',
+    statusClass: 'danger',
+    tags: ['혈압관리', '저염식']
+  }
+]
+
+const activeMetric = computed(() => metricPanels[activeMetricPanel.value] || metricPanels[0])
+
+const missionCards = [
+  {
+    id: 'sleep',
+    tag: '수면',
+    text: '어제 수면 시간이 6시간 미만입니다. 오늘은 30분 일찍 취침해볼까요?',
+    leftAction: '아니오',
+    rightAction: '네'
+  },
+  {
+    id: 'meal',
+    tag: '식단',
+    text: '점심 탄수화물 비중이 높았습니다. 저녁에는 단백질 중심으로 조절해보세요.',
+    leftAction: '건너뛰기',
+    rightAction: '실행'
+  }
+]
 
 const currentScreen = computed(() => {
   const parsed = Number(route.params.step)
@@ -385,18 +488,19 @@ const programBoard = [
 ]
 
 const bottomNav = [
-  { id: 'home', label: 'Home' },
-  { id: 'management', label: 'Health Management' },
-  { id: 'checkup', label: 'Checkup Results' },
-  { id: 'mypage', label: 'My Page' }
+  { id: 'management', label: '건강경영' },
+  { id: 'program', label: '프로그램' },
+  { id: 'record', label: '기록' },
+  { id: 'med', label: '복약' },
+  { id: 'consult', label: '상담' }
 ]
 
 const activeNav = computed(() => {
-  if (currentScreen.value === 6) return 'home'
-  if (currentScreen.value === 7) return 'management'
-  if (currentScreen.value === 8) return 'mypage'
-  if (currentScreen.value === 5) return 'checkup'
-  return 'home'
+  if (currentScreen.value === 6) return 'management'
+  if (currentScreen.value === 7) return 'program'
+  if (currentScreen.value === 8) return 'consult'
+  if (currentScreen.value === 5) return 'record'
+  return 'management'
 })
 
 watch(
@@ -421,6 +525,88 @@ const goToScreen = (step) => {
   const safeStep = Math.min(totalScreens, Math.max(1, step))
   transitionName.value = safeStep > currentScreen.value ? 'slide-forward' : 'slide-back'
   router.push({ name: 'WellnessFlowStep', params: { step: String(safeStep) } })
+}
+
+const goToMetricPanel = (index) => {
+  const maxIndex = metricPanels.length - 1
+  const safeIndex = Math.min(maxIndex, Math.max(0, index))
+  activeMetricPanel.value = safeIndex
+  const el = metricCarouselRef.value
+  if (!el) return
+  el.scrollTo({
+    left: safeIndex * el.clientWidth,
+    behavior: 'smooth'
+  })
+}
+
+const handleMetricScroll = () => {
+  const el = metricCarouselRef.value
+  if (!el || el.clientWidth === 0) return
+  const maxIndex = metricPanels.length - 1
+  const idx = Math.round(el.scrollLeft / el.clientWidth)
+  activeMetricPanel.value = Math.min(maxIndex, Math.max(0, idx))
+}
+
+const onMetricTouchStart = (event) => {
+  if (!event.touches?.length) return
+  metricTouchStartX.value = event.touches[0].clientX
+  metricTouchStartIdx.value = activeMetricPanel.value
+}
+
+const onMetricTouchEnd = (event) => {
+  if (!event.changedTouches?.length) return
+  const deltaX = event.changedTouches[0].clientX - metricTouchStartX.value
+  const threshold = 64
+  if (Math.abs(deltaX) < threshold) {
+    goToMetricPanel(metricTouchStartIdx.value)
+    return
+  }
+  if (deltaX < 0) {
+    goToMetricPanel(metricTouchStartIdx.value + 1)
+  } else {
+    goToMetricPanel(metricTouchStartIdx.value - 1)
+  }
+}
+
+const goToMissionCard = (index) => {
+  const maxIndex = missionCards.length - 1
+  const safeIndex = Math.min(maxIndex, Math.max(0, index))
+  activeMissionCard.value = safeIndex
+  const el = missionCarouselRef.value
+  if (!el) return
+  el.scrollTo({
+    left: safeIndex * el.clientWidth,
+    behavior: 'smooth'
+  })
+}
+
+const handleMissionScroll = () => {
+  const el = missionCarouselRef.value
+  if (!el || el.clientWidth === 0) return
+  const maxIndex = missionCards.length - 1
+  const idx = Math.round(el.scrollLeft / el.clientWidth)
+  activeMissionCard.value = Math.min(maxIndex, Math.max(0, idx))
+}
+
+const onMissionTouchStart = (event) => {
+  if (!event.touches?.length) return
+  missionTouchStartX.value = event.touches[0].clientX
+  missionTouchStartIdx.value = activeMissionCard.value
+}
+
+const onMissionTouchEnd = (event) => {
+  if (!event.changedTouches?.length) return
+  const deltaX = event.changedTouches[0].clientX - missionTouchStartX.value
+  const threshold = 64
+  if (Math.abs(deltaX) < threshold) {
+    goToMissionCard(missionTouchStartIdx.value)
+    return
+  }
+  if (deltaX < 0) {
+    goToMissionCard(missionTouchStartIdx.value + 1)
+  } else {
+    goToMissionCard(missionTouchStartIdx.value - 1)
+  }
 }
 
 const nextScreen = () => {
@@ -464,65 +650,11 @@ const prevScreen = () => {
   gap: 10px;
 }
 
-.nds-status {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4px 6px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: #111827;
-}
-
-.nds-status-icons {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.nds-signal {
-  width: 18px;
-  height: 10px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #111 0 20%, transparent 20% 40%, #111 40% 60%, transparent 60% 80%, #111 80%);
-  opacity: 0.85;
-}
-
-.nds-wifi {
-  width: 14px;
-  height: 10px;
-  border: 2px solid #111;
-  border-top: none;
-  border-radius: 0 0 10px 10px;
-  opacity: 0.85;
-}
-
-.nds-battery {
-  width: 22px;
-  height: 10px;
-  border: 1.5px solid #111;
-  border-radius: 2px;
-  position: relative;
-  opacity: 0.85;
-}
-
-.nds-battery::after {
-  content: '';
-  position: absolute;
-  right: -3px;
-  top: 2px;
-  width: 2px;
-  height: 6px;
-  background: #111;
-  border-radius: 0 1px 1px 0;
-}
-
 .nds-appbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 2px 10px;
+  padding: 4px 2px 8px;
 }
 
 .nds-brand {
@@ -539,19 +671,35 @@ const prevScreen = () => {
 }
 
 .nds-toggle {
-  width: 44px;
+  width: 112px;
   height: 26px;
   border-radius: 999px;
   border: 1px solid #d1d5db;
   background: #e5e7eb;
-  padding: 2px;
+  padding: 2px 3px;
   position: relative;
   transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
 }
 
 .nds-toggle.on {
-  background: #c7d2fe;
-  border-color: #a5b4fc;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border-color: #4f46e5;
+}
+
+.nds-toggle-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  margin-left: 8px;
+  line-height: 1;
+}
+
+.nds-toggle.on .nds-toggle-text {
+  color: #fff;
 }
 
 .nds-toggle-knob {
@@ -565,7 +713,7 @@ const prevScreen = () => {
 }
 
 .nds-toggle.on .nds-toggle-knob {
-  transform: translateX(18px);
+  transform: translateX(0);
 }
 
 .nds-icon-circle {
@@ -680,39 +828,74 @@ const prevScreen = () => {
   border: 1px solid #eef0f4;
 }
 
-.nds-metric-grid {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 0;
-  align-items: stretch;
+.nds-metric-tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.nds-metric-col {
-  padding: 4px 8px 8px;
+.nds-metric-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.nds-metric-tab {
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #6b7280;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  padding: 6px 14px;
+  border-radius: 12px;
+  transition: all 0.18s ease;
+}
+
+.nds-metric-tab.active {
+  color: #111827;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+  box-shadow: inset 0 -2px 0 #6366f1;
+}
+
+.nds-metric-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.nds-metric-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.nds-metric-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  scroll-snap-align: start;
   position: relative;
+  padding: 4px 8px 8px;
 }
 
 .nds-metric-glucose {
   padding-bottom: 10px;
 }
 
-.nds-metric-divider {
-  width: 1px;
-  background: #eceef2;
-  margin: 4px 0 8px;
-}
-
 .nds-metric-head {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  justify-content: space-between;
   margin-bottom: 8px;
 }
 
 .nds-metric-label {
   font-size: 15px;
   font-weight: 800;
+  letter-spacing: -0.04em;
   color: #111827;
 }
 
@@ -720,13 +903,19 @@ const prevScreen = () => {
   border: 0;
   background: transparent;
   color: #9ca3af;
-  padding: 2px;
+  padding: 0;
   display: flex;
   align-items: center;
 }
 
+.nds-metric-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .nds-metric-time {
-  font-size: 12px;
+  font-size: 13px;
   color: #9ca3af;
   margin-left: auto;
 }
@@ -738,15 +927,15 @@ const prevScreen = () => {
   border: 0;
   background: transparent;
   font-size: 13px;
-  font-weight: 600;
-  color: #374151;
+  font-weight: 700;
+  color: #111827;
   padding: 0;
   margin-bottom: 6px;
 }
 
 .nds-caret {
-  font-size: 9px;
-  color: #9ca3af;
+  font-size: 10px;
+  color: #6b7280;
 }
 
 .nds-value-row {
@@ -756,41 +945,45 @@ const prevScreen = () => {
   margin: 2px 0 4px;
 }
 
+.nds-value-wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .nds-value-row.meal {
-  margin-top: 28px;
+  margin-top: 8px;
 }
 
 .nds-value-num {
-  font-size: 32px;
+  font-size: 52px;
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
   color: #111827;
   line-height: 1;
 }
 
 .nds-value-unit {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: #6b7280;
 }
 
-.nds-status-tag {
-  font-size: 14px;
-  font-weight: 700;
+.nds-status-side {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 4px;
+  flex-shrink: 0;
 }
 
-.nds-status-tag.danger {
+.nds-status-side.danger {
   color: #dc2626;
 }
 
-.nds-glucose-accent {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 0;
-  height: 3px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #e879f9, #a855f7, #6366f1);
+.nds-status-side.warn {
+  color: #d97706;
 }
 
 .nds-macros {
@@ -801,11 +994,21 @@ const prevScreen = () => {
 
 .nds-macro-chip {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   color: #6b7280;
   background: #f3f4f6;
   padding: 5px 8px;
   border-radius: 8px;
+}
+
+.nds-glucose-accent {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e879f9, #a855f7, #6366f1);
 }
 
 .nds-metric-foot {
@@ -865,7 +1068,7 @@ const prevScreen = () => {
 
 .nds-goal {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   padding: 16px;
@@ -902,61 +1105,57 @@ const prevScreen = () => {
 
 .nds-goal-gauge {
   flex-shrink: 0;
+  text-align: center;
+}
+
+.nds-goal-rate-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 8px;
 }
 
 .nds-gauge-wrap {
   position: relative;
-  width: 118px;
-  height: 72px;
-}
-
-.nds-gauge-arc {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 58px;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.nds-gauge-disk {
-  width: 116px;
-  height: 116px;
-  border-radius: 50%;
+  width: 74px;
+  height: 74px;
   margin: 0 auto;
-  position: absolute;
-  left: 50%;
-  bottom: -58px;
-  transform: translateX(-50%);
-  background: conic-gradient(
-    from 180deg at 50% 50%,
-    #facc15 0deg 58deg,
-    #4ade80 58deg 116deg,
-    #1e3a8a 116deg 180deg,
-    #e5e7eb 180deg 360deg
-  );
 }
 
-.nds-gauge-center {
-  position: absolute;
-  left: 50%;
-  bottom: 4px;
-  transform: translateX(-50%);
-  text-align: center;
-  width: 100%;
+.nds-gauge-svg {
+  width: 74px;
+  height: 74px;
+  transform: rotate(-90deg);
+}
+
+.nds-gauge-track {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 8;
+}
+
+.nds-gauge-value {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s ease;
 }
 
 .nds-gauge-pct {
-  display: block;
-  font-size: 22px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
   font-weight: 800;
   color: #111827;
-  line-height: 1.1;
+  line-height: 1;
 }
 
 .nds-gauge-label {
-  font-size: 11px;
+  margin: 6px 0 0;
+  font-size: 12px;
   font-weight: 600;
   color: #9ca3af;
 }
@@ -965,36 +1164,51 @@ const prevScreen = () => {
   margin-top: 4px;
 }
 
+.nds-mission-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: -2px 0 8px;
+}
+
+.nds-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #d1d5db;
+}
+
+.nds-dot.active {
+  width: 18px;
+  background: #6366f1;
+}
+
 .nds-mission-scroll {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
-  padding-bottom: 6px;
-  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+  scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
 .nds-mission-scroll::-webkit-scrollbar {
-  height: 4px;
+  display: none;
 }
 
 .nds-mission-card {
-  flex: 0 0 calc(100% - 48px);
-  min-width: calc(100% - 48px);
+  flex: 0 0 100%;
+  min-width: 100%;
   scroll-snap-align: start;
   padding: 16px;
   border: 1px solid #eef0f4;
-}
-
-.nds-mission-peek {
-  flex: 0 0 72px;
-  min-width: 72px;
-  opacity: 0.92;
-  background: #fafafa;
+  cursor: pointer;
 }
 
 .nds-mission-placeholder {
-  min-height: 56px;
+  min-height: 48px;
   margin: 0 0 16px;
   font-size: 14px;
   color: #9ca3af;
@@ -1003,28 +1217,29 @@ const prevScreen = () => {
 
 .nds-mission-btns {
   display: flex;
-  gap: 10px;
+  justify-content: center;
+  gap: 8px;
 }
 
 .nds-btn-outline {
-  flex: 1;
-  padding: 12px;
+  width: 102px;
+  padding: 9px 10px;
   border-radius: 12px;
   border: 2px solid #6366f1;
   background: #fff;
   color: #6366f1;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .nds-btn-solid {
-  flex: 1;
-  padding: 12px;
+  width: 102px;
+  padding: 9px 10px;
   border-radius: 12px;
   border: 0;
   background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -1033,12 +1248,6 @@ const prevScreen = () => {
   font-weight: 700;
   color: #6366f1;
   margin: 0 0 6px;
-}
-
-.nds-mission-peek-text {
-  margin: 0;
-  font-size: 12px;
-  color: #9ca3af;
 }
 
 .card {
@@ -1489,23 +1698,38 @@ const prevScreen = () => {
   border-top: 1px solid #e6ecf6;
   box-shadow: 0 -6px 18px rgba(31, 45, 77, 0.08);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   padding: 8px 8px 12px;
 }
 
 .nav-item {
   border: 0;
   background: transparent;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: #8290a3;
-  padding: 6px 2px;
+  padding: 5px 2px;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
 }
 
 .nav-item.active {
   color: #2563eb;
   background: #eff6ff;
+}
+
+.nav-icon {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 @media (max-width: 420px) {
