@@ -1,5 +1,5 @@
 <template>
-  <main class="preview-page" :class="{ 'is-nds-home': currentScreen === 6 }">
+  <main class="preview-page" :class="{ 'is-glucose-report': currentScreen === 6 }">
     <section class="phone-shell" :class="{ 'home-only': currentScreen === 6 }">
       <section v-if="currentScreen !== 6" class="flow-header card">
         <p class="flow-title">기업 건강관리 UX 플로우</p>
@@ -86,222 +86,72 @@
             <button class="primary-btn" @click="nextScreen">View Recommended Program</button>
           </section>
 
-          <section v-else-if="currentScreen === 6" class="nds-home">
-            <header class="nds-appbar">
-              <span class="nds-brand">nDS Health</span>
-              <div class="nds-appbar-actions">
-                <button
-                  type="button"
-                  class="nds-toggle"
-                  :class="{ on: homeToggle }"
-                  aria-label="건강경영 모드 전환"
-                  @click="homeToggle = !homeToggle"
-                >
-                  <span class="nds-toggle-text">건강경영</span>
-                  <span class="nds-toggle-knob" />
-                </button>
-                <button type="button" class="nds-icon-circle" aria-label="알림">
-                  <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <path
-                      d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1z"
-                      stroke-width="1.6"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
+          <section v-else-if="currentScreen === 6" class="glucose-report" aria-label="혈당 결과보고서">
+            <header class="gr-hero">
+              <p class="gr-kicker">AGF · 혈당 결과보고서</p>
+              <h1 class="gr-title">오늘의 혈당, 한눈에 보기</h1>
             </header>
 
-            <div class="nds-subbar">
-              <span class="nds-subbar-title">홈</span>
-              <div class="nds-subbar-right">
-                <span class="nds-subbar-divider" aria-hidden="true" />
-                <div class="nds-subbar-icons">
-                  <button type="button" class="nds-icon-plain" aria-label="블루투스">
-                    <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                      <path
-                        d="M12 3v7l4-3-4-4zm0 7l-4 3 4 4v-7zm0 7v5M8.5 8.5l7 7M15.5 8.5l-7 7"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </button>
-                  <button type="button" class="nds-icon-plain" aria-label="설정">
-                    <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                      <path
-                        d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"
-                        stroke-width="1.5"
-                      />
-                      <path
-                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <p class="gr-lead">
+              지난 14일 동안 목표 범위(70~180 mg/dL) 안에 머문 시간이 전반적으로 잘 유지되고 있어요. 식사 직후에만 조금 올라가는 패턴이 보이니, 그 구간만 살짝 다듬어 보면 더 안정될 수 있어요.
+            </p>
 
-            <button type="button" class="nds-announce">
-              <span class="nds-announce-ico" aria-hidden="true">📢</span>
-              <span class="nds-announce-text">
-                공지가 있다면 이곳에 텍스트로 노출. 선택 가능. 한줄만...
-              </span>
-              <span class="nds-chevron" aria-hidden="true">›</span>
-            </button>
-
-            <article class="nds-metric-card card">
-              <div class="nds-metric-tabs" role="tablist" aria-label="건강 데이터 탭">
-                <button
-                  v-for="(panel, idx) in metricPanels"
-                  :key="panel.id"
-                  type="button"
-                  class="nds-metric-tab"
-                  :class="{ active: activeMetricPanel === idx }"
-                  role="tab"
-                  :aria-label="`${panel.title} 보기`"
-                  @click="goToMetricPanel(idx)"
-                >
-                  {{ panel.title }}
-                </button>
-              </div>
-
-              <div
-                ref="metricCarouselRef"
-                class="nds-metric-carousel"
-                @scroll.passive="handleMetricScroll"
-                @touchstart.passive="onMetricTouchStart"
-                @touchend="onMetricTouchEnd"
-              >
-                <section
-                  v-for="panel in metricPanels"
-                  :key="panel.id"
-                  class="nds-metric-slide"
-                  :class="{ 'nds-metric-glucose': panel.id === 'glucose' }"
-                >
-                  <div class="nds-metric-head">
-                    <span class="nds-metric-label">{{ panel.title }}</span>
-                    <span class="nds-metric-right">
-                      <span class="nds-metric-time">방금 전</span>
-                      <button type="button" class="nds-refresh" aria-label="새로고침">
-                        <svg class="nds-svg-sm" viewBox="0 0 24 24" aria-hidden="true">
-                          <path
-                            d="M4 12a8 8 0 0 1 14.5-4M20 12a8 8 0 0 1-14.5 4M4 12h3m13 0h-3M12 4v3m0 13v-3"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-                      </button>
-                    </span>
-                  </div>
-                  <button v-if="panel.dropdown" type="button" class="nds-dropdown">
-                    {{ panel.dropdown }}
-                    <span class="nds-caret">▼</span>
-                  </button>
-                  <div class="nds-value-wrap">
-                    <p class="nds-value-row" :class="{ meal: panel.id === 'meal' }">
-                      <span class="nds-value-num">{{ panel.value }}</span>
-                      <span class="nds-value-unit">{{ panel.unit }}</span>
-                    </p>
-                    <p v-if="panel.status" class="nds-status-side" :class="panel.statusClass">{{ panel.status }}</p>
-                  </div>
-                  <div v-if="panel.macros?.length" class="nds-macros">
-                    <span v-for="macro in panel.macros" :key="macro" class="nds-macro-chip">{{ macro }}</span>
-                  </div>
-                  <div v-if="panel.id === 'glucose'" class="nds-glucose-accent" aria-hidden="true" />
-                </section>
-              </div>
-
-              <div class="nds-metric-foot">
-                <div class="nds-tags">
-                  <span v-for="tag in activeMetric.tags" :key="tag"># {{ tag }}</span>
-                </div>
-                <div class="nds-chart-icons">
-                  <button type="button" class="nds-mini-chart" aria-label="막대 차트">
-                    <svg viewBox="0 0 24 24" class="nds-svg-sm" aria-hidden="true">
-                      <path d="M5 19V9M10 19V5M15 19v-6M20 19v-3" fill="none" stroke="currentColor" stroke-width="1.8" />
-                    </svg>
-                  </button>
-                  <button type="button" class="nds-mini-chart" aria-label="추이 차트">
-                    <svg viewBox="0 0 24 24" class="nds-svg-sm" aria-hidden="true">
-                      <path d="M4 16l4-4 4 3 8-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <article class="nds-coach card">
-              <h3 class="nds-section-title">1:1 건강코치 코멘트</h3>
-              <p class="nds-coach-body">
-                식후에 혈당이 조금 높게 올라간 게 보여요. 오늘 식사에서 탄수화물이 조금 많았을 수도 있어서, 다음에는 양을 살짝만 조절해 보시면 좋을 것 같아요.
-              </p>
-            </article>
-
-            <article class="nds-goal card">
-              <div class="nds-goal-left">
-                <p class="nds-goal-d">D-28</p>
-                <p class="nds-goal-name">홍길동 님</p>
-                <p class="nds-goal-target">혈당 10 mg/dL 낮추기</p>
-                <p class="nds-goal-week">1주차</p>
-              </div>
-              <div class="nds-goal-gauge">
-                <p class="nds-goal-rate-title">오늘 달성률</p>
-                <div class="nds-gauge-wrap">
-                  <svg class="nds-gauge-svg" viewBox="0 0 64 64" aria-hidden="true">
-                    <circle class="nds-gauge-track" cx="32" cy="32" r="26" />
-                    <circle
-                      class="nds-gauge-value"
-                      cx="32"
-                      cy="32"
-                      r="26"
-                      :style="{ strokeDasharray: gaugeCircumference, strokeDashoffset: gaugeOffset }"
-                    />
-                  </svg>
-                  <span class="nds-gauge-pct">{{ goalRate }}%</span>
-                </div>
-                <p class="nds-gauge-label">달성</p>
-              </div>
-            </article>
-
-            <section class="nds-mission-section">
-              <h3 class="nds-section-title">오늘의 미션</h3>
-              <div class="nds-mission-dots" aria-hidden="true">
-                <span
-                  v-for="(_, idx) in missionCards"
-                  :key="`mission-dot-${idx}`"
-                  class="nds-dot"
-                  :class="{ active: activeMissionCard === idx }"
-                />
-              </div>
-              <div
-                ref="missionCarouselRef"
-                class="nds-mission-scroll"
-                @scroll.passive="handleMissionScroll"
-                @touchstart.passive="onMissionTouchStart"
-                @touchend="onMissionTouchEnd"
-              >
-                <article
-                  v-for="(mission, idx) in missionCards"
-                  :key="mission.id"
-                  class="nds-mission-card card"
-                  @click="goToMissionCard(idx)"
-                >
-                  <p class="nds-mission-tag"># {{ mission.tag }}</p>
-                  <p class="nds-mission-placeholder">{{ mission.text }}</p>
-                  <div class="nds-mission-btns">
-                    <button type="button" class="nds-btn-outline">{{ mission.leftAction }}</button>
-                    <button type="button" class="nds-btn-solid">{{ mission.rightAction }}</button>
-                  </div>
-                </article>
-              </div>
+            <section class="gr-card">
+              <h2 class="gr-h2">주요 지표</h2>
+              <ul class="gr-metrics" role="list">
+                <li class="gr-metric">
+                  <span class="gr-m-label">평균 혈당</span>
+                  <span class="gr-m-value">142 <span class="gr-unit">mg/dL</span></span>
+                </li>
+                <li class="gr-metric">
+                  <span class="gr-m-label">TIR (70~180)</span>
+                  <span class="gr-m-value">68%</span>
+                </li>
+                <li class="gr-metric">
+                  <span class="gr-m-label">고혈당 구간</span>
+                  <span class="gr-m-value">22%</span>
+                </li>
+                <li class="gr-metric">
+                  <span class="gr-m-label">저혈당 구간</span>
+                  <span class="gr-m-value">3%</span>
+                </li>
+                <li class="gr-metric">
+                  <span class="gr-m-label">혈당 변동성</span>
+                  <span class="gr-m-value gr-m-note">중간 <span class="gr-pill">CV 요약</span></span>
+                </li>
+                <li class="gr-metric">
+                  <span class="gr-m-label">공복 평균</span>
+                  <span class="gr-m-value">118 <span class="gr-unit">mg/dL</span></span>
+                </li>
+              </ul>
             </section>
+
+            <section class="gr-card">
+              <h2 class="gr-h2">지표 해석</h2>
+              <p class="gr-p">
+                TIR는 하루 중 혈당이 목표 범위에 머문 비율이에요. 68%는 꽤 잘 맞추고 있는 편이에요. 70%를 한 번 더 노려보면 체감도 좋아질 수 있어요. 고혈당 구간이 늘어난 시간대가 점심 이후라면, 식사 순서(채소 → 단백질 → 탄수화물)나 식후 가벼운 활동을 한 번씩 시험해 보셔도 좋아요.
+              </p>
+            </section>
+
+            <section class="gr-card">
+              <h2 class="gr-h2">오늘 · 이번 주 권장</h2>
+              <ul class="gr-actions">
+                <li>오늘: 식후 10~15분 가볍게 걷기 2회</li>
+                <li>이번 주: 같은 시간대에 혈당 기록 5일 이상 남기기</li>
+                <li>수면 6시간 미만이 이어지면 다음 날 변동이 커질 수 있어요. 취침 시각만 20분 앞당겨 보기</li>
+              </ul>
+            </section>
+
+            <section class="gr-card gr-card-softwarn">
+              <h2 class="gr-h2">조금 더 신경 쓰면 좋은 점</h2>
+              <p class="gr-p">
+                저혈당 구간은 짧게 나타났지만, 어지럼이나 식은땀이 있었다면 기록에 메모해 두세요. 증상이 반복되면 일정·식사 간격을 전문가와 함께 조정해 보는 것이 좋아요.
+              </p>
+            </section>
+
+            <p class="gr-foot">
+              이 보고서 타입은 목표 범위는 대체로 맞추고 있으나, 식후 혈당만 조금 튀는 패턴이 있는 분께 특히 도움이 됩니다. 예시 수치이며 실제 서비스에서는 개인 데이터로 채워집니다.
+            </p>
           </section>
 
           <section v-else-if="currentScreen === 7" class="card">
@@ -338,7 +188,7 @@
       </section>
     </section>
 
-    <nav class="bottom-nav">
+    <nav v-if="currentScreen !== 6" class="bottom-nav">
       <button
         v-for="item in bottomNav"
         :key="item.id"
@@ -381,70 +231,9 @@ const totalScreens = 8
 const route = useRoute()
 const router = useRouter()
 const transitionName = ref('slide-forward')
-const homeToggle = ref(true)
-const metricCarouselRef = ref(null)
-const missionCarouselRef = ref(null)
-const activeMetricPanel = ref(0)
-const activeMissionCard = ref(0)
-const metricTouchStartX = ref(0)
-const metricTouchStartIdx = ref(0)
-const missionTouchStartX = ref(0)
-const missionTouchStartIdx = ref(0)
-const goalRate = ref(62)
 const selectedImport = ref('corp')
 const riskLabels = ['A', 'C', 'D', 'High Risk']
 const riskIndex = 1
-const gaugeCircumference = 2 * Math.PI * 26
-const gaugeOffset = computed(() => gaugeCircumference - (goalRate.value / 100) * gaugeCircumference)
-
-const metricPanels = [
-  {
-    id: 'glucose',
-    title: '혈당',
-    dropdown: '공복혈당',
-    value: '140',
-    unit: 'mg/dL',
-    status: '높음',
-    statusClass: 'danger',
-    tags: ['혈당 상승', '식사유의']
-  },
-  {
-    id: 'meal',
-    title: '식사',
-    value: '1,200',
-    unit: 'kcal',
-    macros: ['탄 400g', '당 10g'],
-    tags: ['식사기록', '영양관리']
-  },
-  {
-    id: 'pressure',
-    title: '혈압',
-    value: '128/84',
-    unit: 'mmHg',
-    status: '높음',
-    statusClass: 'danger',
-    tags: ['혈압관리', '저염식']
-  }
-]
-
-const activeMetric = computed(() => metricPanels[activeMetricPanel.value] || metricPanels[0])
-
-const missionCards = [
-  {
-    id: 'sleep',
-    tag: '수면',
-    text: '어제 수면 시간이 6시간 미만입니다. 오늘은 30분 일찍 취침해볼까요?',
-    leftAction: '아니오',
-    rightAction: '네'
-  },
-  {
-    id: 'meal',
-    tag: '식단',
-    text: '점심 탄수화물 비중이 높았습니다. 저녁에는 단백질 중심으로 조절해보세요.',
-    leftAction: '건너뛰기',
-    rightAction: '실행'
-  }
-]
 
 const currentScreen = computed(() => {
   const parsed = Number(route.params.step)
@@ -496,7 +285,6 @@ const bottomNav = [
 ]
 
 const activeNav = computed(() => {
-  if (currentScreen.value === 6) return 'management'
   if (currentScreen.value === 7) return 'program'
   if (currentScreen.value === 8) return 'consult'
   if (currentScreen.value === 5) return 'record'
@@ -527,88 +315,6 @@ const goToScreen = (step) => {
   router.push({ name: 'WellnessFlowStep', params: { step: String(safeStep) } })
 }
 
-const goToMetricPanel = (index) => {
-  const maxIndex = metricPanels.length - 1
-  const safeIndex = Math.min(maxIndex, Math.max(0, index))
-  activeMetricPanel.value = safeIndex
-  const el = metricCarouselRef.value
-  if (!el) return
-  el.scrollTo({
-    left: safeIndex * el.clientWidth,
-    behavior: 'smooth'
-  })
-}
-
-const handleMetricScroll = () => {
-  const el = metricCarouselRef.value
-  if (!el || el.clientWidth === 0) return
-  const maxIndex = metricPanels.length - 1
-  const idx = Math.round(el.scrollLeft / el.clientWidth)
-  activeMetricPanel.value = Math.min(maxIndex, Math.max(0, idx))
-}
-
-const onMetricTouchStart = (event) => {
-  if (!event.touches?.length) return
-  metricTouchStartX.value = event.touches[0].clientX
-  metricTouchStartIdx.value = activeMetricPanel.value
-}
-
-const onMetricTouchEnd = (event) => {
-  if (!event.changedTouches?.length) return
-  const deltaX = event.changedTouches[0].clientX - metricTouchStartX.value
-  const threshold = 64
-  if (Math.abs(deltaX) < threshold) {
-    goToMetricPanel(metricTouchStartIdx.value)
-    return
-  }
-  if (deltaX < 0) {
-    goToMetricPanel(metricTouchStartIdx.value + 1)
-  } else {
-    goToMetricPanel(metricTouchStartIdx.value - 1)
-  }
-}
-
-const goToMissionCard = (index) => {
-  const maxIndex = missionCards.length - 1
-  const safeIndex = Math.min(maxIndex, Math.max(0, index))
-  activeMissionCard.value = safeIndex
-  const el = missionCarouselRef.value
-  if (!el) return
-  el.scrollTo({
-    left: safeIndex * el.clientWidth,
-    behavior: 'smooth'
-  })
-}
-
-const handleMissionScroll = () => {
-  const el = missionCarouselRef.value
-  if (!el || el.clientWidth === 0) return
-  const maxIndex = missionCards.length - 1
-  const idx = Math.round(el.scrollLeft / el.clientWidth)
-  activeMissionCard.value = Math.min(maxIndex, Math.max(0, idx))
-}
-
-const onMissionTouchStart = (event) => {
-  if (!event.touches?.length) return
-  missionTouchStartX.value = event.touches[0].clientX
-  missionTouchStartIdx.value = activeMissionCard.value
-}
-
-const onMissionTouchEnd = (event) => {
-  if (!event.changedTouches?.length) return
-  const deltaX = event.changedTouches[0].clientX - missionTouchStartX.value
-  const threshold = 64
-  if (Math.abs(deltaX) < threshold) {
-    goToMissionCard(missionTouchStartIdx.value)
-    return
-  }
-  if (deltaX < 0) {
-    goToMissionCard(missionTouchStartIdx.value + 1)
-  } else {
-    goToMissionCard(missionTouchStartIdx.value - 1)
-  }
-}
-
 const nextScreen = () => {
   if (currentScreen.value < totalScreens) {
     goToScreen(currentScreen.value + 1)
@@ -629,8 +335,8 @@ const prevScreen = () => {
   color: #181b20;
 }
 
-.preview-page.is-nds-home {
-  background: #f2f4f8;
+.preview-page.is-glucose-report {
+  background: #f0f2f7;
 }
 
 .phone-shell {
@@ -641,6 +347,154 @@ const prevScreen = () => {
 
 .phone-shell.home-only {
   padding-top: 8px;
+  padding-bottom: 28px;
+}
+
+/* —— 혈당 결과보고서 전용 (/wellness-flow/6) —— */
+.glucose-report {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 8px;
+}
+
+.gr-hero {
+  padding: 4px 2px 0;
+}
+
+.gr-kicker {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #4f46e5;
+}
+
+.gr-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.25;
+  color: #111827;
+}
+
+.gr-lead {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #374151;
+}
+
+.gr-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 14px;
+  border: 1px solid #e8eaf0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.gr-card-softwarn {
+  border-color: #fde68a;
+  background: linear-gradient(180deg, #fffbeb 0%, #fff 48%);
+}
+
+.gr-h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.gr-metrics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gr-metric {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.gr-metric:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.gr-m-label {
+  font-size: 13px;
+  color: #6b7280;
+  flex: 1;
+  min-width: 0;
+}
+
+.gr-m-value {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+  text-align: right;
+}
+
+.gr-m-note {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.gr-unit {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.gr-pill {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+  vertical-align: middle;
+}
+
+.gr-p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.gr-actions {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #374151;
+}
+
+.gr-actions li {
+  margin-bottom: 8px;
+}
+
+.gr-actions li:last-child {
+  margin-bottom: 0;
+}
+
+.gr-foot {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #9ca3af;
+  padding: 0 4px 8px;
 }
 
 /* —— nDS Health home (screen 6) —— */
