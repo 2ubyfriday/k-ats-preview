@@ -104,10 +104,23 @@
                   <span class="gr-m-label">평균 혈당</span>
                   <span class="gr-m-value">142 <span class="gr-unit">mg/dL</span></span>
                 </li>
-                <li class="gr-metric">
-                  <span class="gr-m-label">TIR (70~180)</span>
-                  <span class="gr-m-value">68%</span>
-                </li>
+                <li class="gr-metric gr-metric-tir">
+  <span class="gr-m-label">TIR (70~180)</span>
+  <div class="gr-tir-graph" role="img" aria-label="TIR 범위 분포 그래프">
+    <div class="gr-tir-bar">
+      <span class="gr-tir-low" style="height: 3%"></span>
+      <span class="gr-tir-target" style="height: 68%"></span>
+      <span class="gr-tir-high" style="height: 22%"></span>
+      <span class="gr-tir-veryhigh" style="height: 7%"></span>
+    </div>
+    <ul class="gr-tir-legend">
+      <li><em class="c-veryhigh"></em> 매우 높음 7%</li>
+      <li><em class="c-high"></em> 높음 22%</li>
+      <li><em class="c-target"></em> 목표 범위 68%</li>
+      <li><em class="c-low"></em> 낮음 3%</li>
+    </ul>
+  </div>
+</li>
                 <li class="gr-metric">
                   <span class="gr-m-label">고혈당 구간</span>
                   <span class="gr-m-value">22%</span>
@@ -489,7 +502,62 @@ const prevScreen = () => {
 .gr-actions li:last-child {
   margin-bottom: 0;
 }
-
+.gr-metric-tir {
+  align-items: flex-start;
+}
+ 
+.gr-tir-graph {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 172px;
+}
+ 
+.gr-tir-bar {
+  width: 14px;
+  height: 120px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: flex;
+  flex-direction: column-reverse;
+}
+ 
+.gr-tir-low { background: #ef4444; display: block; width: 100%; }
+.gr-tir-target { background: #22c55e; display: block; width: 100%; }
+.gr-tir-high { background: #f59e0b; display: block; width: 100%; }
+.gr-tir-veryhigh { background: #eab308; display: block; width: 100%; }
+ 
+.gr-tir-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: #374151;
+  line-height: 1.35;
+}
+ 
+.gr-tir-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+ 
+.gr-tir-legend em {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+ 
+.gr-tir-legend .c-veryhigh { background: #eab308; }
+.gr-tir-legend .c-high { background: #f59e0b; }
+.gr-tir-legend .c-target { background: #22c55e; }
+.gr-tir-legend .c-low { background: #ef4444; }
 .gr-foot {
   margin: 0;
   font-size: 12px;
