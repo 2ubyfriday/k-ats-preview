@@ -87,6 +87,7 @@
           </section>
 
           <section v-else-if="currentScreen === 6" class="glucose-report" aria-label="혈당 결과보고서">
+            <p class="report-body">안녕하세요 👋</p>
             <header class="gr-hero">
               <p class="gr-kicker">AGF · 혈당 결과보고서</p>
               <h1 class="gr-title">오늘의 혈당, 한눈에 보기</h1>
