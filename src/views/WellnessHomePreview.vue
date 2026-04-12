@@ -1,5 +1,5 @@
 <template>
-  <main class="preview-page" :class="{ 'is-glucose-report': currentScreen === 6 }">
+  <main class="preview-page" :class="{ 'is-nds-wellness': currentScreen === 6 }">
     <section class="phone-shell" :class="{ 'home-only': currentScreen === 6 }">
       <section v-if="currentScreen !== 6" class="flow-header card">
         <p class="flow-title">기업 건강관리 UX 플로우</p>
@@ -86,72 +86,178 @@
             <button class="primary-btn" @click="nextScreen">View Recommended Program</button>
           </section>
 
-          <section v-else-if="currentScreen === 6" class="glucose-report" aria-label="혈당 결과보고서">
-            <header class="gr-hero">
-              <p class="gr-kicker">AGF · 혈당 결과보고서</p>
-              <h1 class="gr-title">오늘의 혈당, 한눈에 보기</h1>
-            </header>
+          <section v-else-if="currentScreen === 6" class="nds-wellness-screen6" aria-label="nDS Health 홈">
+            <Transition name="w6-panel" mode="out-in">
+              <!-- 1페이지: 홈 -->
+              <div v-if="screen6Panel === 'home'" key="s6-home" class="w6-stack">
+                <header class="nds-appbar">
+                  <span class="nds-brand">nDS Health</span>
+                  <div class="nds-appbar-actions">
+                    <button
+                      type="button"
+                      class="nds-toggle"
+                      :class="{ on: homeToggle }"
+                      aria-label="건강경영 모드"
+                      @click="homeToggle = !homeToggle"
+                    >
+                      <span class="nds-toggle-text">건강경영</span>
+                      <span class="nds-toggle-knob" />
+                    </button>
+                    <button type="button" class="nds-icon-plain" aria-label="블루투스">
+                      <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <path
+                          d="M12 3v7l4-3-4-4zm0 7l-4 3 4 4v-7zm0 7v5M8.5 8.5l7 7M15.5 8.5l-7 7"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="nds-icon-plain" aria-label="설정">
+                      <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <path
+                          d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"
+                          stroke-width="1.5"
+                        />
+                        <path
+                          d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="nds-icon-circle" aria-label="알림">
+                      <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <path
+                          d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1z"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
 
-            <p class="gr-lead">
-              지난 14일 동안 목표 범위(70~180 mg/dL) 안에 머문 시간이 전반적으로 잘 유지되고 있어요. 식사 직후에만 조금 올라가는 패턴이 보이니, 그 구간만 살짝 다듬어 보면 더 안정될 수 있어요.
-            </p>
+                <div class="nds-subbar">
+                  <span class="nds-subbar-title">홈</span>
+                </div>
 
-            <section class="gr-card">
-              <h2 class="gr-h2">주요 지표</h2>
-              <ul class="gr-metrics" role="list">
-                <li class="gr-metric">
-                  <span class="gr-m-label">평균 혈당</span>
-                  <span class="gr-m-value">142 <span class="gr-unit">mg/dL</span></span>
-                </li>
-                <li class="gr-metric">
-                  <span class="gr-m-label">TIR (70~180)</span>
-                  <span class="gr-m-value">68%</span>
-                </li>
-                <li class="gr-metric">
-                  <span class="gr-m-label">고혈당 구간</span>
-                  <span class="gr-m-value">22%</span>
-                </li>
-                <li class="gr-metric">
-                  <span class="gr-m-label">저혈당 구간</span>
-                  <span class="gr-m-value">3%</span>
-                </li>
-                <li class="gr-metric">
-                  <span class="gr-m-label">혈당 변동성</span>
-                  <span class="gr-m-value gr-m-note">중간 <span class="gr-pill">CV 요약</span></span>
-                </li>
-                <li class="gr-metric">
-                  <span class="gr-m-label">공복 평균</span>
-                  <span class="gr-m-value">118 <span class="gr-unit">mg/dL</span></span>
-                </li>
-              </ul>
-            </section>
+                <button type="button" class="nds-announce">
+                  <span class="nds-announce-ico" aria-hidden="true">📢</span>
+                  <span class="nds-announce-text">새로운 건강 미션이 도착했습니다. 오늘의 미션을 확인해 보세요.</span>
+                  <span class="nds-chevron" aria-hidden="true">›</span>
+                </button>
 
-            <section class="gr-card">
-              <h2 class="gr-h2">지표 해석</h2>
-              <p class="gr-p">
-                TIR는 하루 중 혈당이 목표 범위에 머문 비율이에요. 68%는 꽤 잘 맞추고 있는 편이에요. 70%를 한 번 더 노려보면 체감도 좋아질 수 있어요. 고혈당 구간이 늘어난 시간대가 점심 이후라면, 식사 순서(채소 → 단백질 → 탄수화물)나 식후 가벼운 활동을 한 번씩 시험해 보셔도 좋아요.
-              </p>
-            </section>
+                <article class="w6-mission-card card">
+                  <div class="w6-mission-card-top">
+                    <span class="w6-d28">D-28</span>
+                  </div>
+                  <h2 class="w6-mission-heading">혈당 10mg/dL 낮춰보기!</h2>
+                  <p class="w6-mission-tags"># 할만해요 · # 식사, 운동 위주</p>
+                  <div class="w6-mission-cta-wrap">
+                    <span class="w6-new-pill" aria-hidden="true">New</span>
+                    <button type="button" class="w6-mission-link" @click="goScreen6Mission">
+                      오늘의 미션 바로가기
+                      <span class="w6-chev">›</span>
+                    </button>
+                  </div>
+                  <p class="w6-mission-sub">▶ 오늘 수행하지 않은 미션이 5개 있어요 :)</p>
+                </article>
 
-            <section class="gr-card">
-              <h2 class="gr-h2">오늘 · 이번 주 권장</h2>
-              <ul class="gr-actions">
-                <li>오늘: 식후 10~15분 가볍게 걷기 2회</li>
-                <li>이번 주: 같은 시간대에 혈당 기록 5일 이상 남기기</li>
-                <li>수면 6시간 미만이 이어지면 다음 날 변동이 커질 수 있어요. 취침 시각만 20분 앞당겨 보기</li>
-              </ul>
-            </section>
+                <article class="w6-ticker card" aria-live="polite">
+                  <Transition name="w6-tick" mode="out-in">
+                    <div :key="tickerIndex" class="w6-ticker-body">
+                      <div class="w6-ticker-row">
+                        <span class="w6-ticker-label">{{ healthTickerItems[tickerIndex].label }}</span>
+                        <span class="w6-ticker-num">{{ healthTickerItems[tickerIndex].value }}</span>
+                        <span
+                          v-if="healthTickerItems[tickerIndex].delta"
+                          class="w6-ticker-delta"
+                          :class="healthTickerItems[tickerIndex].up ? 'is-up' : 'is-down'"
+                        >
+                          {{ healthTickerItems[tickerIndex].delta }}
+                        </span>
+                      </div>
+                      <p class="w6-ticker-note">{{ healthTickerItems[tickerIndex].note }}</p>
+                    </div>
+                  </Transition>
+                </article>
 
-            <section class="gr-card gr-card-softwarn">
-              <h2 class="gr-h2">조금 더 신경 쓰면 좋은 점</h2>
-              <p class="gr-p">
-                저혈당 구간은 짧게 나타났지만, 어지럼이나 식은땀이 있었다면 기록에 메모해 두세요. 증상이 반복되면 일정·식사 간격을 전문가와 함께 조정해 보는 것이 좋아요.
-              </p>
-            </section>
+                <div class="w6-quick-row">
+                  <button type="button" class="w6-quick-tile">컨텐츠 / 다양한 건강정보</button>
+                  <button type="button" class="w6-quick-tile">1:1 문의 / 전담코치에게 문의</button>
+                </div>
 
-            <p class="gr-foot">
-              이 보고서 타입은 목표 범위는 대체로 맞추고 있으나, 식후 혈당만 조금 튀는 패턴이 있는 분께 특히 도움이 됩니다. 예시 수치이며 실제 서비스에서는 개인 데이터로 채워집니다.
-            </p>
+                <button type="button" class="w6-primary-mission-btn" @click="goScreen6Mission">오늘의 미션</button>
+              </div>
+
+              <!-- 2페이지: 미션 -->
+              <div v-else key="s6-mission" class="w6-stack">
+                <header class="nds-appbar">
+                  <span class="nds-brand">nDS Health</span>
+                  <div class="nds-appbar-actions">
+                    <button
+                      type="button"
+                      class="nds-toggle"
+                      :class="{ on: homeToggle }"
+                      aria-label="건강경영 모드"
+                      @click="homeToggle = !homeToggle"
+                    >
+                      <span class="nds-toggle-text">건강경영</span>
+                      <span class="nds-toggle-knob" />
+                    </button>
+                    <button type="button" class="nds-icon-circle" aria-label="알림">
+                      <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <path
+                          d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1z"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+
+                <div class="w6-mp-head">
+                  <span class="w6-mp-mission-label">미션</span>
+                  <div class="w6-mp-head-right">
+                    <span class="w6-chart-ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2563eb" stroke-width="1.8">
+                        <path d="M5 19V9M10 19V5M15 19v-6M20 19v-3" stroke-linecap="round" />
+                      </svg>
+                    </span>
+                    <span class="w6-d28">D-28</span>
+                  </div>
+                </div>
+                <p class="w6-mp-line">혈당 10mg/dL 낮춰보기!</p>
+                <button type="button" class="w6-purple-mission" @click="focusMissionCarousel">오늘의 미션</button>
+
+                <div ref="missionCarouselEl" class="w6-carousel" role="region" aria-label="미션 카드">
+                  <article v-for="card in missionSwipeCards" :key="card.id" class="w6-carousel-card card">
+                    <p class="w6-c-tag">{{ card.tag }}</p>
+                    <h3 class="w6-c-title">{{ card.title }}</h3>
+                    <div class="w6-c-img">image</div>
+                  </article>
+                </div>
+
+                <div class="w6-record-bar">
+                  <span class="w6-record-txt">기록</span>
+                  <button
+                    type="button"
+                    class="w6-back-home"
+                    aria-label="이전 화면(홈)으로"
+                    @click="screen6Panel = 'home'"
+                  >
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <path d="M3 10.5 12 3l9 7.5M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </Transition>
           </section>
 
           <section v-else-if="currentScreen === 7" class="card">
@@ -224,7 +330,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const totalScreens = 8
@@ -291,6 +397,81 @@ const activeNav = computed(() => {
   return 'management'
 })
 
+/** /wellness-flow/6: 홈 ↔ 미션 전환 (웰니스 전용, 스포츠 앱과 무관) */
+const screen6Panel = ref('home')
+const homeToggle = ref(true)
+const tickerIndex = ref(0)
+const missionCarouselEl = ref(null)
+
+const healthTickerItems = [
+  {
+    label: '혈당',
+    value: '120 mg/dL',
+    delta: '▲ 1.2',
+    up: true,
+    note: '▶ 지난주대비 혈당이 상승했어요. 주의가 필요해요.'
+  },
+  {
+    label: '혈압',
+    value: '120 mmHg',
+    delta: '▲ 2.3 상승',
+    up: true,
+    note: '▶ 수축기 혈압이 소폭 올랐어요. 나트륨 섭취를 한 번 점검해 보세요.'
+  },
+  {
+    label: '체중',
+    value: '72 kg',
+    delta: '▼ 0.4',
+    up: false,
+    note: '▶ 지난주보다 소폭 감소했어요. 지금 리듬을 유지해 보세요.'
+  }
+]
+
+const missionSwipeCards = [
+  { id: 'm1', tag: '#식사', title: '30분이상 꼭꼭 씹어먹기' },
+  { id: 'm2', tag: '#수면', title: '하루 6시간 이상 자기' },
+  { id: 'm3', tag: '#활동', title: '식후 10분 가볍게 걷기' }
+]
+
+let tickerTimer = null
+
+const clearHealthTicker = () => {
+  if (tickerTimer != null) {
+    clearInterval(tickerTimer)
+    tickerTimer = null
+  }
+}
+
+const syncHealthTicker = () => {
+  clearHealthTicker()
+  if (currentScreen.value !== 6 || screen6Panel.value !== 'home') return
+  tickerTimer = window.setInterval(() => {
+    tickerIndex.value = (tickerIndex.value + 1) % healthTickerItems.length
+  }, 4200)
+}
+
+const goScreen6Mission = () => {
+  screen6Panel.value = 'mission'
+}
+
+const focusMissionCarousel = () => {
+  missionCarouselEl.value?.scrollTo({ left: 0, behavior: 'smooth' })
+}
+
+watch(
+  () => [currentScreen.value, screen6Panel.value],
+  () => {
+    if (currentScreen.value !== 6) {
+      screen6Panel.value = 'home'
+      tickerIndex.value = 0
+    }
+    syncHealthTicker()
+  },
+  { immediate: true }
+)
+
+onUnmounted(() => clearHealthTicker())
+
 watch(
   () => route.params.step,
   (step) => {
@@ -335,8 +516,8 @@ const prevScreen = () => {
   color: #181b20;
 }
 
-.preview-page.is-glucose-report {
-  background: #f0f2f7;
+.preview-page.is-nds-wellness {
+  background: #f2f4f8;
 }
 
 .phone-shell {
@@ -350,151 +531,334 @@ const prevScreen = () => {
   padding-bottom: 28px;
 }
 
-/* —— 혈당 결과보고서 전용 (/wellness-flow/6) —— */
-.glucose-report {
+/* —— /wellness-flow/6 nDS Health (웰니스 전용 UI) —— */
+.nds-wellness-screen6 {
+  min-height: 60vh;
+}
+
+.w6-stack {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding-bottom: 8px;
+  gap: 12px;
+  padding-bottom: 12px;
 }
 
-.gr-hero {
-  padding: 4px 2px 0;
+.w6-panel-enter-active,
+.w6-panel-leave-active {
+  transition: opacity 0.22s ease;
 }
 
-.gr-kicker {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: #4f46e5;
+.w6-panel-enter-from,
+.w6-panel-leave-to {
+  opacity: 0;
 }
 
-.gr-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.25;
-  color: #111827;
+.w6-tick-enter-active,
+.w6-tick-leave-active {
+  transition: opacity 0.32s ease, transform 0.32s ease;
 }
 
-.gr-lead {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.55;
-  color: #374151;
+.w6-tick-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-.gr-card {
-  background: #fff;
-  border-radius: 14px;
+.w6-tick-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.w6-mission-card {
   padding: 16px 14px;
-  border: 1px solid #e8eaf0;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
 
-.gr-card-softwarn {
-  border-color: #fde68a;
-  background: linear-gradient(180deg, #fffbeb 0%, #fff 48%);
+.w6-mission-card-top {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
 }
 
-.gr-h2 {
-  margin: 0 0 12px;
-  font-size: 15px;
+.w6-d28 {
+  font-size: 14px;
   font-weight: 800;
+  color: #6366f1;
+}
+
+.w6-mission-heading {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   color: #111827;
 }
 
-.gr-metrics {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.gr-metric {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.gr-metric:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.gr-m-label {
+.w6-mission-tags {
+  margin: 0 0 14px;
   font-size: 13px;
   color: #6b7280;
-  flex: 1;
-  min-width: 0;
 }
 
-.gr-m-value {
-  font-size: 17px;
+.w6-mission-cta-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.w6-new-pill {
+  font-size: 10px;
   font-weight: 800;
-  color: #111827;
-  text-align: right;
+  color: #fff;
+  background: #ef4444;
+  padding: 3px 8px;
+  border-radius: 6px;
+  line-height: 1;
 }
 
-.gr-m-note {
+.w6-mission-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
   font-size: 15px;
   font-weight: 700;
+  color: #4f46e5;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
 }
 
-.gr-unit {
-  font-size: 12px;
-  font-weight: 600;
+.w6-chev {
+  font-size: 18px;
+  font-weight: 300;
+  color: #9ca3af;
+}
+
+.w6-mission-sub {
+  margin: 0;
+  font-size: 13px;
   color: #6b7280;
+  line-height: 1.45;
 }
 
-.gr-pill {
-  display: inline-block;
-  margin-left: 4px;
-  padding: 2px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 999px;
-  background: #eef2ff;
-  color: #4338ca;
-  vertical-align: middle;
+.w6-ticker {
+  padding: 16px 14px;
+  border-radius: 16px;
+  border: 1px solid #eef0f4;
+  min-height: 108px;
+  overflow: hidden;
 }
 
-.gr-p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #374151;
+.w6-ticker-body {
+  min-height: 76px;
 }
 
-.gr-actions {
-  margin: 0;
-  padding-left: 18px;
-  font-size: 14px;
-  line-height: 1.65;
-  color: #374151;
-}
-
-.gr-actions li {
+.w6-ticker-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
   margin-bottom: 8px;
 }
 
-.gr-actions li:last-child {
-  margin-bottom: 0;
+.w6-ticker-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #374151;
 }
 
-.gr-foot {
+.w6-ticker-num {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #111827;
+  line-height: 1;
+}
+
+.w6-ticker-delta {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.w6-ticker-delta.is-up {
+  color: #dc2626;
+}
+
+.w6-ticker-delta.is-down {
+  color: #2563eb;
+}
+
+.w6-ticker-note {
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
+  color: #4b5563;
+}
+
+.w6-quick-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.w6-quick-tile {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+  padding: 14px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  line-height: 1.35;
+  text-align: center;
+  cursor: pointer;
+  min-height: 64px;
+}
+
+.w6-primary-mission-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 14px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+}
+
+.w6-mp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 2px 0;
+}
+
+.w6-mp-mission-label {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.w6-mp-head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.w6-chart-ico {
+  display: flex;
+  align-items: center;
+}
+
+.w6-mp-line {
+  margin: 4px 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.w6-purple-mission {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.w6-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 2px 12px;
+  scrollbar-width: thin;
+}
+
+.w6-carousel::-webkit-scrollbar {
+  height: 4px;
+}
+
+.w6-carousel-card {
+  flex: 0 0 78%;
+  min-width: 78%;
+  scroll-snap-align: center;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.w6-c-tag {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6366f1;
+}
+
+.w6-c-title {
+  margin: 0 0 12px;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #111827;
+}
+
+.w6-c-img {
+  height: 120px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
   color: #9ca3af;
-  padding: 0 4px 8px;
+  font-weight: 600;
+}
+
+.w6-record-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px 8px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 4px;
+}
+
+.w6-record-txt {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.w6-back-home {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.w6-back-home:active {
+  background: #eef2ff;
 }
 
 /* —— nDS Health home (screen 6) —— */
