@@ -90,7 +90,7 @@
             <Transition name="w6-panel" mode="out-in">
               <!-- 1페이지: 홈 -->
               <div v-if="screen6Panel === 'home'" key="s6-home" class="w6-stack">
-                <header class="nds-appbar">
+                <header class="nds-appbar w6-appbar-top">
                   <span class="nds-brand">nDS Health</span>
                   <div class="nds-appbar-actions">
                     <button
@@ -103,6 +103,22 @@
                       <span class="nds-toggle-text">건강경영</span>
                       <span class="nds-toggle-knob" />
                     </button>
+                    <button type="button" class="nds-icon-circle" aria-label="알림">
+                      <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <path
+                          d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1z"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+
+                <div class="nds-subbar w6-subbar-home">
+                  <span class="nds-subbar-title">홈</span>
+                  <div class="w6-subbar-icons">
                     <button type="button" class="nds-icon-plain" aria-label="블루투스">
                       <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                         <path
@@ -127,134 +143,226 @@
                         />
                       </svg>
                     </button>
-                    <button type="button" class="nds-icon-circle" aria-label="알림">
-                      <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                        <path
-                          d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1z"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </button>
                   </div>
-                </header>
-
-                <div class="nds-subbar">
-                  <span class="nds-subbar-title">홈</span>
                 </div>
 
                 <button type="button" class="nds-announce">
                   <span class="nds-announce-ico" aria-hidden="true">📢</span>
-                  <span class="nds-announce-text">새로운 건강 미션이 도착했습니다. 오늘의 미션을 확인해 보세요.</span>
+                  <span class="nds-announce-text">공지가 있다면 이곳에 텍스트로 노출. 선택 가능. 한줄만...</span>
                   <span class="nds-chevron" aria-hidden="true">›</span>
                 </button>
 
                 <article class="w6-mission-card card">
-                  <div class="w6-mission-card-top">
+                  <div class="w6-mission-title-row">
+                    <h2 class="w6-mission-heading">혈당 10mg/dL 낮춰보기!</h2>
                     <span class="w6-d28">D-28</span>
                   </div>
-                  <h2 class="w6-mission-heading">혈당 10mg/dL 낮춰보기!</h2>
-                  <p class="w6-mission-tags"># 할만해요 · # 식사, 운동 위주</p>
-                  <div class="w6-mission-cta-wrap">
-                    <span class="w6-new-pill" aria-hidden="true">New</span>
-                    <button type="button" class="w6-mission-link" @click="goScreen6Mission">
-                      오늘의 미션 바로가기
-                      <span class="w6-chev">›</span>
+                  <div class="w6-mission-mid-row w6-mission-mid-row--tags-only">
+                    <div class="w6-mission-tags-col">
+                      <p class="w6-mission-tags"># 할만해요</p>
+                      <p class="w6-mission-tags"># 식사, 운동 위주</p>
+                    </div>
+                  </div>
+                  <div class="w6-mission-sub-box">
+                    <p class="w6-mission-sub">▶ 오늘 수행하지 않은 미션이 5개 있어요 :)</p>
+                  </div>
+                  <div class="w6-mission-hero-cta">
+                    <button type="button" class="w6-mission-cta-big" @click="goScreen6Mission">
+                      <span class="w6-mission-cta-shine" aria-hidden="true" />
+                      <span class="w6-mission-cta-label">오늘의 미션 바로가기</span>
+                      <span class="w6-mission-cta-chev">›</span>
                     </button>
                   </div>
-                  <p class="w6-mission-sub">▶ 오늘 수행하지 않은 미션이 5개 있어요 :)</p>
                 </article>
 
-                <article class="w6-ticker card" aria-live="polite">
+                <div class="w6-ticker w6-ticker-plain" aria-live="polite">
                   <Transition name="w6-tick" mode="out-in">
                     <div :key="tickerIndex" class="w6-ticker-body">
-                      <div class="w6-ticker-row">
-                        <span class="w6-ticker-label">{{ healthTickerItems[tickerIndex].label }}</span>
-                        <span class="w6-ticker-num">{{ healthTickerItems[tickerIndex].value }}</span>
-                        <span
-                          v-if="healthTickerItems[tickerIndex].delta"
-                          class="w6-ticker-delta"
-                          :class="healthTickerItems[tickerIndex].up ? 'is-up' : 'is-down'"
-                        >
-                          {{ healthTickerItems[tickerIndex].delta }}
-                        </span>
+                      <div class="w6-ticker-value-row">
+                        <div class="w6-ticker-metrics">
+                          <span class="w6-ticker-label">{{ healthTickerItems[tickerIndex].label }}</span>
+                          <span class="w6-ticker-num">{{ healthTickerItems[tickerIndex].value }}</span>
+                          <span
+                            v-if="healthTickerItems[tickerIndex].delta"
+                            class="w6-ticker-delta"
+                            :class="healthTickerItems[tickerIndex].up ? 'is-up' : 'is-down'"
+                          >
+                            {{ healthTickerItems[tickerIndex].delta }}
+                          </span>
+                        </div>
+                        <span class="w6-ticker-row-chev" aria-hidden="true">›</span>
                       </div>
                       <p class="w6-ticker-note">{{ healthTickerItems[tickerIndex].note }}</p>
                     </div>
                   </Transition>
-                </article>
-
-                <div class="w6-quick-row">
-                  <button type="button" class="w6-quick-tile">컨텐츠 / 다양한 건강정보</button>
-                  <button type="button" class="w6-quick-tile">1:1 문의 / 전담코치에게 문의</button>
                 </div>
 
-                <button type="button" class="w6-primary-mission-btn" @click="goScreen6Mission">오늘의 미션</button>
+                <div class="w6-quick-row">
+                  <button type="button" class="w6-quick-tile">
+                    <span class="w6-qt-title">컨텐츠</span>
+                    <span class="w6-qt-sub">다양한 건강정보</span>
+                  </button>
+                  <button type="button" class="w6-quick-tile">
+                    <span class="w6-qt-title">1:1 문의</span>
+                    <span class="w6-qt-sub">전담코치에게 문의</span>
+                  </button>
+                </div>
               </div>
 
               <!-- 2페이지: 미션 -->
-              <div v-else key="s6-mission" class="w6-stack">
-                <header class="nds-appbar">
-                  <span class="nds-brand">nDS Health</span>
-                  <div class="nds-appbar-actions">
-                    <button
-                      type="button"
-                      class="nds-toggle"
-                      :class="{ on: homeToggle }"
-                      aria-label="건강경영 모드"
-                      @click="homeToggle = !homeToggle"
-                    >
-                      <span class="nds-toggle-text">건강경영</span>
-                      <span class="nds-toggle-knob" />
-                    </button>
-                    <button type="button" class="nds-icon-circle" aria-label="알림">
-                      <svg class="nds-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                        <path
-                          d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1z"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </header>
-
+              <div v-else key="s6-mission" class="w6-stack w6-stack-mission">
                 <div class="w6-mp-head">
                   <span class="w6-mp-mission-label">미션</span>
-                  <div class="w6-mp-head-right">
+                  <div class="w6-mp-head-actions">
                     <span class="w6-chart-ico" aria-hidden="true">
                       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2563eb" stroke-width="1.8">
                         <path d="M5 19V9M10 19V5M15 19v-6M20 19v-3" stroke-linecap="round" />
                       </svg>
                     </span>
-                    <span class="w6-d28">D-28</span>
+                    <button type="button" class="nds-icon-plain w6-mp-home-btn" aria-label="홈으로" @click="screen6Panel = 'home'">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="M3 10.5 12 3l9 7.5M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
-                <p class="w6-mp-line">혈당 10mg/dL 낮춰보기!</p>
-                <button type="button" class="w6-purple-mission" @click="focusMissionCarousel">오늘의 미션</button>
-
-                <div ref="missionCarouselEl" class="w6-carousel" role="region" aria-label="미션 카드">
-                  <article v-for="card in missionSwipeCards" :key="card.id" class="w6-carousel-card card">
-                    <p class="w6-c-tag">{{ card.tag }}</p>
-                    <h3 class="w6-c-title">{{ card.title }}</h3>
-                    <div class="w6-c-img">image</div>
-                  </article>
+                <div class="w6-mp-line-row">
+                  <p class="w6-mp-line">혈당 10mg/dL 낮춰보기!</p>
+                  <span class="w6-d28">D-28</span>
                 </div>
-
-                <div class="w6-record-bar">
-                  <span class="w6-record-txt">기록</span>
+                <div class="w6-mp-tab-row" role="tablist" aria-label="미션 구분">
                   <button
                     type="button"
-                    class="w6-back-home"
-                    aria-label="이전 화면(홈)으로"
-                    @click="screen6Panel = 'home'"
+                    role="tab"
+                    class="w6-mp-tab"
+                    :class="{ active: missionViewTab === 'today' }"
+                    :aria-selected="missionViewTab === 'today'"
+                    @click="openMissionTodayTab"
                   >
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                      <path d="M3 10.5 12 3l9 7.5M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    오늘의 미션
                   </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    class="w6-mp-tab"
+                    :class="{ active: missionViewTab === 'record' }"
+                    :aria-selected="missionViewTab === 'record'"
+                    @click="openMissionRecordTab"
+                  >
+                    미션기록
+                  </button>
+                </div>
+
+                <div v-show="missionViewTab === 'record'" class="w6-mission-record">
+                  <div class="w6-mh-cats" role="tablist" aria-label="미션 카테고리">
+                    <button
+                      v-for="c in missionHistoryCategories"
+                      :key="c.id"
+                      type="button"
+                      role="tab"
+                      class="w6-mh-cat"
+                      :class="{ active: missionHistoryCategory === c.id }"
+                      :aria-selected="missionHistoryCategory === c.id"
+                      @click="missionHistoryCategory = c.id"
+                    >
+                      {{ c.label }}
+                    </button>
+                  </div>
+                  <div class="w6-mh-date">
+                    <p class="w6-mh-week">2주차</p>
+                    <p class="w6-mh-day">4월 6일 월요일</p>
+                  </div>
+                  <ul v-if="missionHistoryItemsFiltered.length" class="w6-mh-list">
+                    <li
+                      v-for="item in missionHistoryItemsFiltered"
+                      :key="item.id"
+                      class="w6-mh-card"
+                      :class="{
+                        'w6-mh-card--meal': item.kind === 'meal_kcal',
+                        'w6-mh-card--pending': item.kind === 'incomplete',
+                        'w6-mh-card--done': item.kind === 'complete_text'
+                      }"
+                    >
+                      <template v-if="item.kind === 'meal_kcal'">
+                        <p class="w6-mh-tag">{{ item.tag }}</p>
+                        <h3 class="w6-mh-title">{{ item.title }}</h3>
+                        <div class="w6-mh-meal-row">
+                          <div class="w6-mh-img">image</div>
+                          <span class="w6-mh-kcal">{{ item.kcal }}</span>
+                        </div>
+                      </template>
+                      <template v-else-if="item.kind === 'incomplete'">
+                        <div class="w6-mh-card-top">
+                          <span class="w6-mh-tag">{{ item.tag }}</span>
+                          <span class="w6-mh-pill w6-mh-pill--pending">미완료</span>
+                        </div>
+                        <div class="w6-mh-pending-row">
+                          <h3 class="w6-mh-title">{{ item.title }}</h3>
+                          <span class="w6-mh-chev" aria-hidden="true">›</span>
+                        </div>
+                      </template>
+                      <template v-else>
+                        <p class="w6-mh-tag">{{ item.tag }}</p>
+                        <h3 class="w6-mh-title">{{ item.title }}</h3>
+                        <div class="w6-mh-card-foot">
+                          <span class="w6-mh-pill w6-mh-pill--done">완료</span>
+                        </div>
+                      </template>
+                    </li>
+                  </ul>
+                  <p v-else class="w6-mh-empty">해당 카테고리에 표시할 기록이 없습니다.</p>
+                </div>
+
+                <div v-show="missionViewTab === 'today'" class="w6-carousel-wrap">
+                  <div
+                    ref="missionCarouselEl"
+                    class="w6-carousel"
+                    role="region"
+                    aria-label="미션 카드"
+                    @scroll.passive="onMissionCarouselScroll"
+                  >
+                    <article
+                      v-for="card in missionSwipeCards"
+                      :key="card.id"
+                      class="w6-carousel-card"
+                      :class="{ 'w6-carousel-card--completed': card.completed }"
+                    >
+                      <div class="w6-carousel-card-inner">
+                        <span v-if="card.completed" class="w6-c-complete-stamp" aria-label="완료">완료</span>
+                        <p class="w6-c-tag">{{ card.tag }}</p>
+                        <h3 class="w6-c-title">{{ card.title }}</h3>
+                        <div class="w6-c-img">image</div>
+                      </div>
+                    </article>
+                  </div>
+                  <div class="w6-carousel-dots" role="tablist" aria-label="미션 카드 위치">
+                    <button
+                      v-for="(card, i) in missionSwipeCards"
+                      :key="'dot-' + card.id"
+                      type="button"
+                      class="w6-carousel-dot"
+                      :class="{ active: i === missionCarouselActive }"
+                      role="tab"
+                      :aria-selected="i === missionCarouselActive"
+                      :aria-label="`${i + 1}번째 미션`"
+                      @click="onMissionCarouselDotClick(i)"
+                    />
+                  </div>
+                  <div class="w6-carousel-controls" role="toolbar" aria-label="카드 탐색">
+                    <button type="button" class="w6-cc-btn" aria-label="이전 카드" @click="missionCarouselPrev">‹</button>
+                    <span class="w6-cc-index" aria-live="polite">
+                      {{ missionCarouselActive + 1 }} | {{ missionSwipeCards.length }}
+                    </span>
+                    <button
+                      type="button"
+                      class="w6-cc-btn w6-cc-pause"
+                      :aria-label="carouselAutoPaused ? '자동 재생' : '일시정지'"
+                      @click="toggleCarouselAuto"
+                    >
+                      {{ carouselAutoPaused ? '▶' : '‖' }}
+                    </button>
+                    <button type="button" class="w6-cc-btn" aria-label="다음 카드" @click="missionCarouselNext">›</button>
+                  </div>
                 </div>
               </div>
             </Transition>
@@ -330,7 +438,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onUnmounted } from 'vue'
+import { computed, ref, watch, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const totalScreens = 8
@@ -409,29 +517,78 @@ const healthTickerItems = [
     value: '120 mg/dL',
     delta: '▲ 1.2',
     up: true,
-    note: '▶ 지난주대비 혈당이 상승했어요. 주의가 필요해요.'
+    note: '▶ 지난주 대비 상승 · 주의 필요'
   },
   {
     label: '혈압',
     value: '120 mmHg',
     delta: '▲ 2.3 상승',
     up: true,
-    note: '▶ 수축기 혈압이 소폭 올랐어요. 나트륨 섭취를 한 번 점검해 보세요.'
+    note: '▶ 소폭 상승 · 나트륨·염분 점검'
   },
   {
     label: '체중',
     value: '72 kg',
     delta: '▼ 0.4',
     up: false,
-    note: '▶ 지난주보다 소폭 감소했어요. 지금 리듬을 유지해 보세요.'
+    note: '▶ 지난주 대비 소폭 감소 · 리듬 유지'
   }
 ]
 
 const missionSwipeCards = [
-  { id: 'm1', tag: '#식사', title: '30분이상 꼭꼭 씹어먹기' },
-  { id: 'm2', tag: '#수면', title: '하루 6시간 이상 자기' },
-  { id: 'm3', tag: '#활동', title: '식후 10분 가볍게 걷기' }
+  { id: 'm1', completed: false, tag: '#식사', title: '30분이상 꼭꼭 씹어먹기' },
+  { id: 'm2', completed: false, tag: '#수면', title: '하루 6시간 이상 자기' },
+  { id: 'm3', completed: true, tag: '#활동', title: '식후 10분 가볍게 걷기' }
 ]
+
+const missionViewTab = ref('today')
+const missionHistoryCategory = ref('all')
+
+const missionHistoryCategories = [
+  { id: 'all', label: '전체' },
+  { id: 'meal', label: '식사' },
+  { id: 'sleep', label: '수면' },
+  { id: 'exercise', label: '운동' },
+  { id: 'walk', label: '걷기' },
+  { id: 'med', label: '복약' }
+]
+
+const missionHistoryItems = [
+  {
+    id: 'h1',
+    kind: 'meal_kcal',
+    category: 'meal',
+    tag: '#식사',
+    title: '아침, 점심, 저녁, 간식중 하나 기록하기',
+    kcal: '1,234 Kcal'
+  },
+  {
+    id: 'h2',
+    kind: 'incomplete',
+    category: 'sleep',
+    tag: '#수면',
+    title: '수면시간 기록하기'
+  },
+  {
+    id: 'h3',
+    kind: 'complete_text',
+    category: 'walk',
+    tag: '#운동',
+    title: '식사후 10분간 걷기'
+  }
+]
+
+const missionHistoryItemsFiltered = computed(() => {
+  if (missionHistoryCategory.value === 'all') {
+    return missionHistoryItems
+  }
+  return missionHistoryItems.filter((row) => row.category === missionHistoryCategory.value)
+})
+
+const missionCarouselActive = ref(0)
+const carouselAutoPaused = ref(false)
+let carouselAutoTimer = null
+let carouselScrollDebounce = null
 
 let tickerTimer = null
 
@@ -452,10 +609,126 @@ const syncHealthTicker = () => {
 
 const goScreen6Mission = () => {
   screen6Panel.value = 'mission'
+  missionViewTab.value = 'today'
+}
+
+const openMissionTodayTab = () => {
+  missionViewTab.value = 'today'
+  nextTick(() => {
+    scrollToMissionCard(0)
+    missionCarouselActive.value = 0
+    onMissionCarouselScroll()
+    syncCarouselAuto()
+  })
+}
+
+const openMissionRecordTab = () => {
+  missionViewTab.value = 'record'
+  clearCarouselAuto()
+}
+
+const clearCarouselAuto = () => {
+  if (carouselAutoTimer != null) {
+    clearInterval(carouselAutoTimer)
+    carouselAutoTimer = null
+  }
+}
+
+const scrollToMissionCard = (index) => {
+  const el = missionCarouselEl.value
+  if (!el) return
+  const cards = el.querySelectorAll('.w6-carousel-card')
+  const max = cards.length - 1
+  const i = Math.min(max, Math.max(0, index))
+  const card = cards[i]
+  if (!card) return
+  const target = card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2
+  el.scrollTo({ left: Math.max(0, target), behavior: 'smooth' })
+}
+
+const restartCarouselAutoAfterUserMove = () => {
+  clearCarouselAuto()
+  syncCarouselAuto()
+}
+
+const onMissionCarouselScroll = () => {
+  const el = missionCarouselEl.value
+  if (!el) return
+  const cards = el.querySelectorAll('.w6-carousel-card')
+  if (!cards.length) return
+  const center = el.scrollLeft + el.clientWidth / 2
+  let best = 0
+  let bestDist = Infinity
+  cards.forEach((c, idx) => {
+    const mid = c.offsetLeft + c.offsetWidth / 2
+    const d = Math.abs(mid - center)
+    if (d < bestDist) {
+      bestDist = d
+      best = idx
+    }
+  })
+  missionCarouselActive.value = best
+
+  if (carouselScrollDebounce != null) {
+    clearTimeout(carouselScrollDebounce)
+  }
+  carouselScrollDebounce = window.setTimeout(() => {
+    carouselScrollDebounce = null
+    restartCarouselAutoAfterUserMove()
+  }, 320)
+}
+
+const onMissionCarouselDotClick = (i) => {
+  scrollToMissionCard(i)
+  nextTick(() => {
+    restartCarouselAutoAfterUserMove()
+  })
+}
+
+const missionCarouselPrev = () => {
+  scrollToMissionCard(missionCarouselActive.value - 1)
+  nextTick(() => {
+    restartCarouselAutoAfterUserMove()
+  })
+}
+
+const missionCarouselNext = () => {
+  scrollToMissionCard(missionCarouselActive.value + 1)
+  nextTick(() => {
+    restartCarouselAutoAfterUserMove()
+  })
+}
+
+const syncCarouselAuto = () => {
+  clearCarouselAuto()
+  if (
+    currentScreen.value !== 6 ||
+    screen6Panel.value !== 'mission' ||
+    missionViewTab.value !== 'today' ||
+    carouselAutoPaused.value
+  ) {
+    return
+  }
+  carouselAutoTimer = window.setInterval(() => {
+    const len = missionSwipeCards.length
+    if (len < 2) return
+    const next = (missionCarouselActive.value + 1) % len
+    scrollToMissionCard(next)
+  }, 2000)
+}
+
+const toggleCarouselAuto = () => {
+  carouselAutoPaused.value = !carouselAutoPaused.value
+  syncCarouselAuto()
 }
 
 const focusMissionCarousel = () => {
-  missionCarouselEl.value?.scrollTo({ left: 0, behavior: 'smooth' })
+  missionViewTab.value = 'today'
+  nextTick(() => {
+    scrollToMissionCard(0)
+    missionCarouselActive.value = 0
+    syncCarouselAuto()
+  })
 }
 
 watch(
@@ -464,13 +737,31 @@ watch(
     if (currentScreen.value !== 6) {
       screen6Panel.value = 'home'
       tickerIndex.value = 0
+      missionViewTab.value = 'today'
     }
     syncHealthTicker()
+    if (screen6Panel.value !== 'mission') {
+      clearCarouselAuto()
+    } else {
+      nextTick(() => {
+        if (missionViewTab.value === 'today') {
+          onMissionCarouselScroll()
+          syncCarouselAuto()
+        }
+      })
+    }
   },
   { immediate: true }
 )
 
-onUnmounted(() => clearHealthTicker())
+onUnmounted(() => {
+  clearHealthTicker()
+  clearCarouselAuto()
+  if (carouselScrollDebounce != null) {
+    clearTimeout(carouselScrollDebounce)
+    carouselScrollDebounce = null
+  }
+})
 
 watch(
   () => route.params.step,
@@ -543,6 +834,10 @@ const prevScreen = () => {
   padding-bottom: 12px;
 }
 
+.w6-stack-mission {
+  padding-top: 6px;
+}
+
 .w6-panel-enter-active,
 .w6-panel-leave-active {
   transition: opacity 0.22s ease;
@@ -568,6 +863,23 @@ const prevScreen = () => {
   transform: translateY(-10px);
 }
 
+.w6-appbar-top .nds-appbar-actions {
+  gap: 8px;
+}
+
+.w6-subbar-home {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 10px;
+}
+
+.w6-subbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
 .w6-mission-card {
   padding: 16px 14px;
   border: 1px solid #e5e7eb;
@@ -575,67 +887,140 @@ const prevScreen = () => {
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
 
-.w6-mission-card-top {
+.w6-mission-title-row {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 4px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .w6-d28 {
   font-size: 14px;
   font-weight: 800;
   color: #6366f1;
+  flex-shrink: 0;
 }
 
 .w6-mission-heading {
-  margin: 0 0 8px;
-  font-size: 18px;
+  margin: 0;
+  font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: #111827;
+  line-height: 1.35;
+  flex: 1;
+  min-width: 0;
+}
+
+.w6-mission-mid-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.w6-mission-tags-col {
+  flex: 1;
+  min-width: 0;
 }
 
 .w6-mission-tags {
-  margin: 0 0 14px;
+  margin: 0 0 6px;
   font-size: 13px;
   color: #6b7280;
+  line-height: 1.4;
 }
 
-.w6-mission-cta-wrap {
+.w6-mission-tags:last-child {
+  margin-bottom: 0;
+}
+
+.w6-mission-mid-row--tags-only {
+  margin-bottom: 6px;
+}
+
+.w6-mission-hero-cta {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.w6-mission-cta-big {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-.w6-new-pill {
-  font-size: 10px;
-  font-weight: 800;
-  color: #fff;
-  background: #ef4444;
-  padding: 3px 8px;
-  border-radius: 6px;
-  line-height: 1;
-}
-
-.w6-mission-link {
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
   border: 0;
-  background: transparent;
-  padding: 0;
-  font-size: 15px;
-  font-weight: 700;
-  color: #4f46e5;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  border-radius: 16px;
+  padding: 17px 24px;
   cursor: pointer;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(125deg, #4f46e5 0%, #7c3aed 42%, #a855f7 88%);
+  box-shadow:
+    0 10px 32px rgba(99, 102, 241, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.06) inset;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.w6-chev {
-  font-size: 18px;
-  font-weight: 300;
-  color: #9ca3af;
+.w6-mission-cta-big:active {
+  transform: scale(0.985);
+  box-shadow:
+    0 6px 20px rgba(99, 102, 241, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.w6-mission-cta-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.22) 48%,
+    rgba(255, 255, 255, 0.08) 52%,
+    transparent 65%
+  );
+  animation: w6-mission-cta-shine 2.8s ease-in-out infinite;
+}
+
+.w6-mission-cta-label {
+  position: relative;
+  z-index: 1;
+}
+
+.w6-mission-cta-chev {
+  position: relative;
+  z-index: 1;
+  font-size: 26px;
+  font-weight: 200;
+  line-height: 1;
+  opacity: 0.95;
+}
+
+@keyframes w6-mission-cta-shine {
+  0%,
+  100% {
+    transform: translateX(-60%);
+  }
+  50% {
+    transform: translateX(60%);
+  }
+}
+
+.w6-mission-sub-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 12px;
+  background: #f9fafb;
 }
 
 .w6-mission-sub {
@@ -646,23 +1031,51 @@ const prevScreen = () => {
 }
 
 .w6-ticker {
-  padding: 16px 14px;
-  border-radius: 16px;
-  border: 1px solid #eef0f4;
-  min-height: 108px;
+  padding: 14px 0;
+  min-height: auto;
   overflow: hidden;
 }
 
-.w6-ticker-body {
-  min-height: 76px;
+.w6-ticker-plain {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-bottom: 1px solid #e8eaef;
+  margin-bottom: 6px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
-.w6-ticker-row {
+.w6-ticker-body {
+  min-height: 64px;
+  width: 100%;
+  min-width: 0;
+}
+
+.w6-ticker-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.w6-ticker-metrics {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 8px 12px;
-  margin-bottom: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.w6-ticker-row-chev {
+  font-size: 22px;
+  font-weight: 300;
+  color: #9ca3af;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .w6-ticker-label {
@@ -695,8 +1108,12 @@ const prevScreen = () => {
 .w6-ticker-note {
   margin: 0;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.4;
   color: #4b5563;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .w6-quick-row {
@@ -710,27 +1127,28 @@ const prevScreen = () => {
   border-radius: 14px;
   background: #fff;
   padding: 14px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #374151;
-  line-height: 1.35;
   text-align: center;
   cursor: pointer;
-  min-height: 64px;
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
-.w6-primary-mission-btn {
-  width: 100%;
-  margin-top: 4px;
-  padding: 14px;
-  border: 0;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-  color: #fff;
-  font-size: 16px;
+.w6-qt-title {
+  font-size: 14px;
   font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  color: #111827;
+  line-height: 1.2;
+}
+
+.w6-qt-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  line-height: 1.3;
 }
 
 .w6-mp-head {
@@ -746,22 +1164,262 @@ const prevScreen = () => {
   color: #111827;
 }
 
-.w6-mp-head-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .w6-chart-ico {
   display: flex;
   align-items: center;
 }
 
+.w6-mp-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.w6-mp-home-btn {
+  color: #4f46e5;
+}
+
+.w6-mp-line-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 8px 0 14px;
+  padding: 0 2px;
+}
+
 .w6-mp-line {
-  margin: 4px 0 12px;
+  margin: 0;
   font-size: 16px;
   font-weight: 700;
   color: #1f2937;
+  flex: 1;
+  min-width: 0;
+}
+
+.w6-mp-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.w6-mp-tab-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.w6-mp-tab {
+  padding: 13px 10px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  border: 2px solid #7c3aed;
+  background: #fff;
+  color: #6d28d9;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.w6-mp-tab.active {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: #fff;
+  border-color: #6d28d9;
+}
+
+.w6-mission-record {
+  margin-bottom: 4px;
+}
+
+.w6-mh-cats {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px 20px;
+  overflow-x: auto;
+  padding: 2px 2px 2px;
+  margin: 0 -2px 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.w6-mh-cats::-webkit-scrollbar {
+  display: none;
+}
+
+.w6-mh-cat {
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  padding: 0 2px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #9ca3af;
+  cursor: pointer;
+  position: relative;
+}
+
+.w6-mh-cat.active {
+  color: #111827;
+  font-weight: 800;
+}
+
+.w6-mh-cat.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: #111827;
+  border-radius: 2px;
+}
+
+.w6-mh-date {
+  padding: 8px 2px 12px;
+}
+
+.w6-mh-week {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.w6-mh-day {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.w6-mh-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.w6-mh-empty {
+  margin: 12px 2px;
+  font-size: 14px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.w6-mh-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+  padding: 12px 14px;
+}
+
+.w6-mh-tag {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.w6-mh-title {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.w6-mh-card--meal .w6-mh-title {
+  margin-bottom: 12px;
+}
+
+.w6-mh-meal-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.w6-mh-img {
+  flex: 0 0 120px;
+  height: 88px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+.w6-mh-kcal {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.w6-mh-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.w6-mh-card-top .w6-mh-tag {
+  margin: 0;
+}
+
+.w6-mh-pill {
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.w6-mh-pill--pending {
+  color: #ea580c;
+}
+
+.w6-mh-pending-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.w6-mh-pending-row .w6-mh-title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.w6-mh-chev {
+  font-size: 22px;
+  font-weight: 300;
+  color: #9ca3af;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.w6-mh-card-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2px;
+}
+
+.w6-mh-card--done .w6-mh-title {
+  margin-bottom: 8px;
+}
+
+.w6-mh-pill--done {
+  color: #2563eb;
 }
 
 .w6-purple-mission {
@@ -771,35 +1429,151 @@ const prevScreen = () => {
   border-radius: 14px;
   background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
   color: #fff;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
-  margin-bottom: 8px;
+  margin-bottom: 0;
+}
+
+.w6-outline-mission {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #7c3aed;
+  border-radius: 14px;
+  background: #fff;
+  color: #6d28d9;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.w6-carousel-wrap {
+  margin: 4px 0 0;
 }
 
 .w6-carousel {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: 14px;
   -webkit-overflow-scrolling: touch;
-  padding: 4px 2px 12px;
-  scrollbar-width: thin;
+  padding: 12px 14px 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .w6-carousel::-webkit-scrollbar {
-  height: 4px;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .w6-carousel-card {
-  flex: 0 0 78%;
-  min-width: 78%;
+  flex: 0 0 82%;
+  min-width: 82%;
+  max-width: 82%;
   scroll-snap-align: center;
   padding: 14px;
   border-radius: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8eaef;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+}
+
+.w6-carousel-card-inner {
+  position: relative;
+}
+
+.w6-carousel-card--completed .w6-c-img {
+  opacity: 0.92;
+}
+
+.w6-c-complete-stamp {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  z-index: 2;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1.5px solid #7c3aed;
+  font-size: 11px;
+  font-weight: 900;
+  color: #111827;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  transform: rotate(-16deg);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.2);
+  pointer-events: none;
+  user-select: none;
+}
+
+.w6-carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 4px;
+}
+
+.w6-carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #d1d5db;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.w6-carousel-dot.active {
+  background: #6366f1;
+  transform: scale(1.2);
+}
+
+.w6-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 6px 8px 12px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.w6-cc-btn {
+  border: 0;
+  background: #e5e7eb;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  cursor: pointer;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.w6-cc-btn:active {
+  background: #d1d5db;
+}
+
+.w6-cc-index {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  min-width: 52px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.w6-cc-pause {
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .w6-c-tag {
@@ -827,38 +1601,6 @@ const prevScreen = () => {
   font-size: 14px;
   color: #9ca3af;
   font-weight: 600;
-}
-
-.w6-record-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 4px 8px;
-  border-top: 1px solid #e5e7eb;
-  margin-top: 4px;
-}
-
-.w6-record-txt {
-  font-size: 17px;
-  font-weight: 800;
-  color: #111827;
-}
-
-.w6-back-home {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  color: #4f46e5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.w6-back-home:active {
-  background: #eef2ff;
 }
 
 /* —— nDS Health home (screen 6) —— */
